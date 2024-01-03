@@ -1,3 +1,41 @@
+/* Navbar styles */
+.navBar {
+  background-color: #333;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0; 
+  width: 100%;
+}
+
+.navList {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+}
+
+.navListItem {
+  color: white;
+  cursor: pointer;
+}
+
+/* Footer styles */
+.footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 0px;
+  position: fixed;
+  bottom: 0;
+  left: 0; 
+  right: 0;
+  width: 100%;
+}
+
+/* General styling */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -5,15 +43,18 @@
   text-align: center;
 }
 
+/* Logo styles */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -33,10 +74,13 @@
   }
 }
 
+/* Card styles */
 .card {
   padding: 2em;
+  margin-top: 60px;
 }
 
+/* Additional styles */
 .read-the-docs {
   color: #888;
 }
