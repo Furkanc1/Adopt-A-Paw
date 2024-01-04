@@ -18,9 +18,23 @@ export const appEmail = `plutocoding@gmail.com`;
 export const appAuthors = `Alex, Fuf, & Isaiah`;
 export const StateContext = createContext({});
 
+export const getUsers = async () => {
+  try {
+    let usersResponse = await fetch(`http://localhost:3001/users`);
+    if (usersResponse.status === 200) {
+      let usersData = await usersResponse.json();
+      console.log(`Users`, usersData);
+      return usersData;
+    }
+  } catch (error) {
+    console.log(`Server Error`, error);
+  }
+}
+
 export default function App() {
   // Store things in useState that you want to access across your application (or things that update)
   // let [projects, setProjects] = useState(getGithubData());
+  // let [users, setUsers] = useState(null);
   let [title, setTitle] = useState(appTitle);
   let [authors, setAuthors] = useState(appAuthors);
   let [authorEmail, setAuthorEmail] = useState(appEmail);
@@ -30,7 +44,11 @@ export default function App() {
     if (title === ``) setTitle(appTitle);
     if (authors === ``) setAuthors(appAuthors);
     if (authorEmail === ``) setAuthorEmail(appEmail);
+    // if (Array.isArray(setUsers) === true) setUsers([]);
     if (projects.length === 0) setProjects(projectsUsedAcrossApplication);
+    // if (users === null) setUsers(getUsers());
+    // console.log(`Users`, users);
+
   }, [projects, title, authors, authorEmail])
   
   return (
