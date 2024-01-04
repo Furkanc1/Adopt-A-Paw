@@ -6,7 +6,7 @@ import Project from '../../components/project/Project';
 import Section from '../../components/section/Section';
 // Add a featured project section that will display above the recent github projects, and it can have extra settings for custom images
 export default function Portfolio() {
-    let { logo, projects } = useContext(StateContext);
+    let { projects } = useContext(StateContext);
     return (
         <>
             <Header />

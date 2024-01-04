@@ -3,7 +3,7 @@ import { StateContext } from '../../App';
 import { useContext, useEffect, useState } from 'react';
 
 export default function Header() {
-    let { title, logo, authors } = useContext(StateContext); // State Context runs whenever the component that creates the context runs
+    let { title, authors } = useContext(StateContext); // State Context runs whenever the component that creates the context runs
     let [pageName, setPageName] = useState(window.location.pathname); // Local state will run anytime the component its inside of loads or unloads
 
     // Runs anytime THIS component (that the use effect is inside of) is loaded or unloaded.

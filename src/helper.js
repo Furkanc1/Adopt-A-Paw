@@ -3,13 +3,13 @@ export const vanillaJavaScriptValidation = (emailString) => {
     let errorString = "Please enter a valid email!";
     // includes returns true/false
     let emailHasAtSymbol = emailString.includes(`@`);
-    if (emailHasAtSymbol == true) {
+    if (emailHasAtSymbol === true) {
         // split returns an array
         let emailWebsite = emailString.split(`@`)[1];
         let emailDomain = emailWebsite.split(`.`)[1];
         let emailHasValidDomain = validDomains.includes(emailDomain);
         // all of these have to be true for the email to be valid
-        return emailString != `` && emailHasValidDomain == true ? true : errorString;
+        return emailString !== `` && emailHasValidDomain === true ? true : errorString;
     } else {
         errorString = `Email Addresses Need to have the @ Symbol`;
         return errorString;

@@ -13,21 +13,25 @@ import { createContext, useEffect, useState } from 'react';
 import { projectsUsedAcrossApplication } from './helper';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+export const appTitle = `Adopt-A-Paw`;
+export const appEmail = `plutocoding@gmail.com`;
+export const appAuthors = `Alex, Fuf, & Isaiah`;
 export const StateContext = createContext({});
 
 export default function App() {
   // Store things in useState that you want to access across your application (or things that update)
-  let [title, setTitle] = useState(`Adopt-A-Paw`);
   // let [projects, setProjects] = useState(getGithubData());
-  let [authors, setAuthors] = useState(`Alex, Fuf, & Isaiah`);
-  let [authorEmail, setAuthorEmail] = useState(`plutocoding@gmail.com`);
+  let [title, setTitle] = useState(appTitle);
+  let [authors, setAuthors] = useState(appAuthors);
+  let [authorEmail, setAuthorEmail] = useState(appEmail);
   let [projects, setProjects] = useState(projectsUsedAcrossApplication);
 
   useEffect(() => {
-    if (projects.length === 0) {
-      setProjects(projectsUsedAcrossApplication);
-    }
-  }, [projects])
+    if (title === ``) setTitle(appTitle);
+    if (authors === ``) setAuthors(appAuthors);
+    if (authorEmail === ``) setAuthorEmail(appEmail);
+    if (projects.length === 0) setProjects(projectsUsedAcrossApplication);
+  }, [projects, title, authors, authorEmail])
   
   return (
     <StateContext.Provider value={{ title, logo, projects, authors, authorEmail }}>

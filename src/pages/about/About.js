@@ -1,11 +1,11 @@
-import { useContext } from 'react';
-import { StateContext } from '../../App';
+// import { useContext } from 'react';
+// import { StateContext } from '../../App';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import Section from '../../components/section/Section';
 
 export default function About() {
-    let { logo } = useContext(StateContext);
+    // let { logo } = useContext(StateContext);
     return (
         <>
             <Header />

@@ -1,5 +1,5 @@
-import { StateContext } from '../../App';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
+// import { StateContext } from '../../App';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import Section from '../../components/section/Section';
@@ -7,7 +7,7 @@ import { vanillaJavaScriptValidation } from '../../helper';
 
 export default function Contact() {
 
-    let { logo } = useContext(StateContext);
+    // let { logo } = useContext(StateContext);
 
     let [email, setEmail] = useState(``);
     let [message, setMessage] = useState(``);
@@ -22,7 +22,7 @@ export default function Contact() {
     }
 
     // const determineFieldError = (e) => {
-    //     if (vanillaJavaScriptValidation(email) === true && email != ``) {
+    //     if (vanillaJavaScriptValidation(email) === true && email !== ``) {
     //         // setEmailError(false);
     //     } else {
     //        setEmailError(true); 
@@ -49,7 +49,7 @@ export default function Contact() {
 
                         <input onFocus={(e) => setEmailTouched(true)} onInput={(e) => setEmail(e.target.value)} id={`contactForm_email`} name={`email`} type={`email`} className={`contactFormField`} placeholder={`Enter Email Address...`} required />
 
-                        {emailTouched !== false && vanillaJavaScriptValidation(email) != true && <div className={`errorMessage`}>
+                        {emailTouched !== false && vanillaJavaScriptValidation(email) !== true && <div className={`errorMessage`}>
                             {email === `` ? `Email is Required` : vanillaJavaScriptValidation(email)}
                         </div>}
 
