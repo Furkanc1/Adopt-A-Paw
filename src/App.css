@@ -1,86 +1,38 @@
-/* Navbar styles */
-.navBar {
-  background-color: #333;
-  padding: 10px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0; 
-  width: 100%;
+.App {
+  text-align: center;
 }
 
-.navList {
-  list-style-type: none;
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
   display: flex;
-  justify-content: space-between;
-  margin: 0;
-  padding: 0;
-}
-
-.navListItem {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
   color: white;
-  cursor: pointer;
 }
 
-/* Footer styles */
-.footer {
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 0px;
-  position: fixed;
-  bottom: 0;
-  left: 0; 
-  right: 0;
-  width: 100%;
+.App-link {
+  color: #61dafb;
 }
 
-/* General styling */
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-/* Logo styles */
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
+@keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
   }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-/* Card styles */
-.card {
-  padding: 2em;
-  margin-top: 60px;
-}
-
-/* Additional styles */
-.read-the-docs {
-  color: #888;
 }
