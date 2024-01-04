@@ -1,10 +1,163 @@
+:root {
+  --bg: #282c34;
+  --main: #21DDF7;
+  --error: #970a0a;
+  --bgLight: #586a8e;
+  --secondary: #d515d5;
+  --cardShadow: 0 0 4px 0px rgba(0, 0, 0, 0.25);
+  --plutoBG: linear-gradient(transparent, transparent, transparent, transparent, transparent, transparent, transparent, white), url(/public/pluto_background.png);
+}
+
+header, footer {
+  padding: 15px;
+  color: var(--main);
+}
+
+header {
+  margin-bottom: -57px;
+}
+
+footer {
+  color: black;
+  border-top: 1px solid black;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  transition: 150ms ease-in-out;
+}
+
+a:hover {
+  color: var(--main);
+}
+
+.activePage {
+  color: var(--main);
+}
+
+.activePage.mainColorLinkAlt {
+  color: var(--secondary);
+}
+
+.mainColorLink {
+  color: var(--main);
+}
+
+.mainColorLink:hover {
+  color: white;
+}
+
+.mainColorLinkAlt:hover {
+  color: black;
+}
+
+.flex {
+  display: flex;
+}
+
+.flexColumn {
+  flex-direction: column;
+}
+
+.gap5 {
+  grid-gap: 5px;
+}
+.gap10 {
+  grid-gap: 10px;
+}
+.gap15 {
+  grid-gap: 15px;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+.justifySpaceBetween {
+  justify-content: space-between;
+}
+
+.w100 {
+  width: 100%;
+}
+
+h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+section {
+  min-height: 75vh;
+}
+
+.projects {
+  width: 100%;
+  flex-wrap: wrap;
+  font-size: 0.75em;
+}
+
+.project {
+  width: 31%;
+  overflow: hidden;
+  min-height: 150px;
+  border-radius: 15px;
+  padding-bottom: 15px;
+  box-shadow: var(--cardShadow);
+}
+
+.topic {
+  padding: 8px;
+  color: white;
+  border-radius: 10px;
+  background: black;
+}
+
+.plutoBGSection {
+  background-size: cover !important;
+  background-position: 50% 70% !important;
+  background-repeat: no-repeat !important;
+  background: black;
+}
+
+::placeholder {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.errorMessage {
+  font-size: 11px;
+  color: var(--error);
+  font-family: monospace;
+}
+
+.buttonLink {
+  background: white;
+  padding: 0 15px 5px;
+  border-radius: 10px;
+}
+
 .App {
   text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 55px;
   pointer-events: none;
+}
+
+.contactFormField {
+  min-width: 250px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -13,8 +166,7 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
+.containerWithSpinningLogo {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
