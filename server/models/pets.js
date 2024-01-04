@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
-const petSchema = new mongoose.Schema({
+const petSchema = new Schema({
     name: { type: String, required: true },
     species: { type: String, required: true },
     age: { type: Number },
@@ -12,6 +12,6 @@ const petSchema = new mongoose.Schema({
     //   adopter: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
-const Pet = mongoose.model('Pet', petSchema);
 
-module.exports = Pet;
+const Pet = model('Pet', petSchema)
+module.exports =Pet
