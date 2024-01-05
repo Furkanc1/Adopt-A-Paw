@@ -1,4 +1,16 @@
 {
+<<<<<<< HEAD
+  "name": "adopt-a-paw",
+  "version": "1.0.0",
+  "description": "Group project - Adpot-A-paw",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/server.js --ignore client",
+    "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm run dev\"",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build"
+=======
   "name": "adoptapaw",
   "version": "0.1.0",
   "private": true,
@@ -40,7 +52,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+>>>>>>> main
   },
+  "keywords": [
+    "MERN",
+    "with",
+    "graphql"
+  ],
+  "author": "alux, furk, isaiah",
+  "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.2"
   }
