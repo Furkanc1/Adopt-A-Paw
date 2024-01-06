@@ -1,4 +1,4 @@
-const Users = require('./users');
-// const Pets = require('./pets');
+const User = require('./user');
+const Pet = require('./pet');
 
-module.exports = {  Users };
+module.exports = { User, Pet };

@@ -1,4 +1,14 @@
-const {  } = require('../models');
+// const { Query, Mutation } = require('../models');
+const { Pet, User } = require('./');
+
+// @Resolver()
+// export class FooResolver {
+
+//   @Query()
+//   sayHello() {
+//     return 'Hello World!';
+//   }
+// }
 
 const resolvers = {
   // get all pets (to put onto main page)
@@ -12,14 +22,23 @@ const resolvers = {
   //     return Matchup.find(params);
   //   },
   // },
-  Mutation: {
-    // create the pet (through user)
-    createPet: async (parent, args) => {
-      const matchup = await matchup.create(args);
-      return matchup;
+  Query: {
+    User: async () => {
+      return User.find({});
     },
-
+    Pet: async () => {
+      return Pet.find({});
+    },
+    // other queries...
   },
+  Mutation: {
+    createPet: async (parent, args) => {
+      // Change from matchup to Pet here
+      const pet = await Pet.create(args);
+      return pet;
+    },
+  },
+  
 };
 
 module.exports = resolvers;

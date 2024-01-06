@@ -6,7 +6,7 @@ const typeDefs = `
     adoptedPets: [ID!]
   }
 
-  type Pets {
+  type Pet {
     _id: ID!
     name: String!
     species: String!
@@ -15,13 +15,13 @@ const typeDefs = `
     email: String!
   }
 
-   type Auth{
+   type Auth {
     token: ID!
     user: User
    }
   type Query {
-    Pet: [Pets]
-    me:User
+    pets: [Pet]
+    me: User
   }
 
   type Mutation {

@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-const { Schema } = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const petSchema = new Schema({
     name: { type: String, required: true },
@@ -13,6 +12,5 @@ const petSchema = new Schema({
     //   adopter: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
-
-const Pet = mongoose.model('Pet', petSchema)
-module.exports = Pet
+const Pet = model('Pet', petSchema);
+module.exports = Pet;
