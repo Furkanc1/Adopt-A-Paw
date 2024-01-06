@@ -4,6 +4,7 @@
   "description": "Group project - Adpot-A-paw",
   "main": "index.js",
   "scripts": {
+    "server": "cd server && npm run watch",
     "start": "node server/server.js --ignore client",
     "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
     "client": "cd client && npm start",
