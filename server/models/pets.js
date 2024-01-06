@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
 
 const petSchema = new Schema({
@@ -13,5 +14,5 @@ const petSchema = new Schema({
 });
 
 
-const Pet = model('Pet', petSchema)
-module.exports =Pet
+const Pet = mongoose.model('Pet', petSchema)
+module.exports = Pet
