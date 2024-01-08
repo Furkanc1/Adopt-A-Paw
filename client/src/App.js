@@ -13,32 +13,49 @@ import { createContext, useEffect, useState } from 'react';
 import { projectsUsedAcrossApplication } from './helper';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+import { useQuery, gql } from '@apollo/client';
+
 export const appTitle = `Adopt-A-Paw`;
 export const appEmail = `plutocoding@gmail.com`;
 export const appAuthors = `Alex, Fuf, & Isaiah`;
 export const StateContext = createContext({});
 
-export const getUsers = async () => {
-  try {
-    let usersResponse = await fetch(`http://localhost:3001/users`);
-    if (usersResponse.status === 200) {
-      let usersData = await usersResponse.json();
-      console.log(`Users`, usersData);
-      return usersData;
+// export const getUsers = async () => {
+//   try {
+//     let usersResponse = await fetch(`http://localhost:3001/users`);
+//     if (usersResponse.status === 200) {
+//       let usersData = await usersResponse.json();
+//       console.log(`Users`, usersData);
+//       return usersData;
+//     }
+//   } catch (error) {
+//     console.log(`Server Error`, error);
+//   }
+// }
+
+export const getUsers = gql`
+  query users {
+    users {
+      _id,
+      email,
+      username,
     }
-  } catch (error) {
-    console.log(`Server Error`, error);
   }
-}
+`;
 
 export default function App() {
+  const { usersLoading, usersError, usersData } = useQuery(getUsers);
   // Store things in useState that you want to access across your application (or things that update)
   // let [projects, setProjects] = useState(getGithubData());
-  // let [users, setUsers] = useState(null);
+  // let [users, setUsers] = useState(getUsers());
   let [title, setTitle] = useState(appTitle);
   let [authors, setAuthors] = useState(appAuthors);
   let [authorEmail, setAuthorEmail] = useState(appEmail);
   let [projects, setProjects] = useState(projectsUsedAcrossApplication);
+
+  console.log(`Users Query`, {
+    usersLoading, usersError, usersData
+  });
 
   useEffect(() => {
     if (title === ``) setTitle(appTitle);

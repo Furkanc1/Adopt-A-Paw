@@ -8,7 +8,7 @@ export default function Section({title}) {
             <div className={`containerWithSpinningLogo`}>
                 <img src={logo} className="App-logo" alt="logo" />
                 <p style={{marginTop: 35}}>{title}</p>
-                <div className={`users`}>Users:</div>
+                {/* <div className={`users`}>Users: {users}</div> */}
             </div>
         </section>
     )
