@@ -37,10 +37,64 @@ const startApolloServer = async () => {
     res.send(`Adopt-A-Pet Server`);
   });
   
+  // Using Mongo / Mongoose
+  // app.get('/users', async (req, res) => {
+  //   try {
+  //     const users = await User.find();
+  //     res.json(users);
+  //   } catch (error) {
+  //     res.status(500).send(`Error getting users`, error);
+  //   }
+  // });
+
+  // app.get('/pets', async (req, res) => {
+  //   try {
+  //     const pets = await Pet.find(); 
+  //     res.json(pets);
+  //   } catch (error) {
+  //     res.status(500).send(`Error getting pets`, error);
+  //   }
+  // });
+
+  // Using Apollo GraphQL
+  app.get('/all', async (req, res) => {
+    try {
+      const result = await server.executeOperation({
+        query: `query all {
+          users {
+            _id,
+            email,
+            username,
+          },
+          pets {
+            _id,
+            age,
+            name,
+            species,
+            adopted,
+          }
+        }, `
+      });
+
+      res.json(result.body.singleResult.data);
+    } catch (error) {
+      res.status(500).send(`Error getting users`, error);
+    }
+  });
+  
   app.get('/users', async (req, res) => {
     try {
-      const users = await User.find();
-      res.json(users);
+      const result = await server.executeOperation({
+        query: `query users {
+          users {
+            _id,
+            email,
+            username,
+          }
+        }`
+      });
+
+      res.json(result.body.singleResult.data.users);
     } catch (error) {
       res.status(500).send(`Error getting users`, error);
     }
@@ -48,8 +102,19 @@ const startApolloServer = async () => {
 
   app.get('/pets', async (req, res) => {
     try {
-      const pets = await Pet.find();
-      res.json(pets);
+      const result = await server.executeOperation({
+        query: `query pets {
+          pets {
+            _id,
+            age,
+            name,
+            species,
+            adopted,
+          }
+        }`
+      });
+
+      res.json(result.body.singleResult.data.pets);
     } catch (error) {
       res.status(500).send(`Error getting pets`, error);
     }
