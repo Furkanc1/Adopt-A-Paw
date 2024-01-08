@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
@@ -6,10 +7,19 @@ const path = require('path');
 const typeDefs = require('./schemas/typeDefs');
 const resolvers = require('./schemas/resolvers');
 const db = require('./config/connection');
-const { User, Pet } = require('./schemas');
+// const { User, Pet } = require('./schemas');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+
+// Replace this whatever deployment service we use
+// export const liveLink = `http://adoptapet.com`;
+// export const origin = process.env.NODE_ENV === 'production' ? liveLink : `http://localhost:3000`;
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true, // If you need to include cookies or authorization headers
+}));
 
 const server = new ApolloServer({
   typeDefs,
