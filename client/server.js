@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = process.env.SERVERPORT || 3001;
+const port = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 
 mongoose.connect(process.env.MONGODB_URI || `mongodb://127.0.0.1:27017/adoptapet`);

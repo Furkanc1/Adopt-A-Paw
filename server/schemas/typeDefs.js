@@ -1,9 +1,13 @@
 const typeDefs = `
+  type Query {
+    users: [User!]!
+    pets: [Pet!]!
+  }
+
   type User {
     _id: ID!
     username: String!
     email: String!
-    adoptedPets: [ID!]
   }
 
   type Pet {
@@ -12,23 +16,6 @@ const typeDefs = `
     species: String!
     age: Int
     adopted: Boolean
-    email: String!
-  }
-
-   type Auth {
-    token: ID!
-    user: User
-   }
-  type Query {
-    pets: [Pet]
-    me: User
-  }
-
-  type Mutation {
-    createUser(username: String!, email: String!, password: String!): Auth
-    logIn(email: String!, password: String!): Auth
-    createPet(name: String!, species: String!, age: Int!, adopted: Boolean!, email: String!): User
-    adoptPet(petId: ID!, userId: ID!): User
   }
 `;
 

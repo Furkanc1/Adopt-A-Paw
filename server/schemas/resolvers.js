@@ -1,44 +1,16 @@
-// const { Query, Mutation } = require('../models');
-const { Pet, User } = require('./');
-
-// @Resolver()
-// export class FooResolver {
-
-//   @Query()
-//   sayHello() {
-//     return 'Hello World!';
-//   }
-// }
+const { Pet, User } = require('./index');
 
 const resolvers = {
-  // get all pets (to put onto main page)
-  // Query: {
-  //   tech: async () => {
-  //     return Tech.find({});
-  //   },
-  //   matchups: async (parent, { _id }) => {
-  //     const params = _id ? { _id } : {};
-  //     console.log(`id`, _id)
-  //     return Matchup.find(params);
-  //   },
-  // },
   Query: {
-    User: async () => {
-      return User.find({});
+    users: async () => {
+      let users = await User.find();
+      return users;
     },
-    Pet: async () => {
-      return Pet.find({});
-    },
-    // other queries...
-  },
-  Mutation: {
-    createPet: async (parent, args) => {
-      // Change from matchup to Pet here
-      const pet = await Pet.create(args);
-      return pet;
-    },
-  },
-  
-};
+    pets: async () => {
+      let pets = await Pet.find();
+      return pets;
+   }
+  }
+}
 
 module.exports = resolvers;
