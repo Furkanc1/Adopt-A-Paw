@@ -53,7 +53,7 @@ export const getGithubData = async () => {
       localStorage.setItem(`projects`, JSON.stringify(gitUser?.projects));
   
       projects = gitUser?.projects;
-    };
+    }
 
     return projects;
 }
