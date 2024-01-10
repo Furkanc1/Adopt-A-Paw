@@ -5,18 +5,18 @@ const userSchema = new Schema(
   {
     username: {
       type: String,
-      required: true,
+      required: [true, `Please enter a username`],
       unique: true,
     },
     email: {
       type: String,
-      required: true,
+      required: [true, `Please enter a valid email`],
       unique: true,
       match: [/.+@.+\..+/, "Must use a valid email address"],
     },
     password: {
       type: String,
-      required: true,
+      required: [true, `Please enter a password`],
     },
     // set savedBooks to be an array of data that adheres to the bookSchema
     adoptedPets: [
@@ -28,6 +28,7 @@ const userSchema = new Schema(
   },
   // set this to use virtual below
   {
+    timestamps: true,
     toJSON: {
       virtuals: true,
     },

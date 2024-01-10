@@ -7,10 +7,8 @@ import SignIn from './pages/sign-in/Sign-In';
 import Profile from './pages/profile/Profile';
 import Contact from './pages/contact/Contact';
 import Portfolio from './pages/portfolio/Portfolio';
-import { createContext, useEffect, useState } from 'react';
-// Use line 10 when you want do a fresh github api call, and comment switch project/setProhect import
-// import { getGithubData } from './helper';
 import { projectsUsedAcrossApplication } from './helper';
+import { createContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export const appTitle = `Adopt-A-Paw`;
@@ -18,34 +16,21 @@ export const appEmail = `plutocoding@gmail.com`;
 export const appAuthors = `Alex, Fuf, & Isaiah`;
 export const StateContext = createContext({});
 
-export let usersFromDatabase = null;
-
-export const getUsers = async (usersFromDatabase) => {
+export const getUsers = async () => {
   try {
-   if (usersFromDatabase == null) {
     let usersResponse = await fetch(`http://localhost:3001/users`);
     if (usersResponse.status === 200) {
       let usersData = await usersResponse.json();
       if (Array.isArray(usersData)) {
-        usersFromDatabase = usersData;
-        console.log(`Setting Users`, usersFromDatabase);
         return usersData;
       }
     }
-   } else {
-    return usersFromDatabase;
-   }
   } catch (error) {
     console.log(`Server Error`, error);
   }
 }
 
-export const getUsersFromDatabase = () => {
-  return usersFromDatabase;
-}
-
 export default function App() {
-  // const { usersLoading, usersError, usersData } = useQuery(getUsers2);
   // Store things in useState that you want to access across your application (or things that update)
   // let [projects, setProjects] = useState(getGithubData());
   let [users, setUsers] = useState(null);
@@ -58,13 +43,18 @@ export default function App() {
     if (title === ``) setTitle(appTitle);
     if (authors === ``) setAuthors(appAuthors);
     if (authorEmail === ``) setAuthorEmail(appEmail);
-    // if (Array.isArray(users) === true) setUsers([]);
     if (projects.length === 0) setProjects(projectsUsedAcrossApplication);
-    setTimeout(() => {
-      if (users === null) setUsers(usersFromDatabase != null ? usersFromDatabase : getUsers());
 
-      console.log(`Users`, {users, usersFromDatabase, tryingFunction: getUsersFromDatabase(), test2: getUsers()});
-    }, 5000)
+    const getUsersFromDatabase = async () => {
+      let usersFromDatabase = await getUsers();
+      if (usersFromDatabase) {
+        console.log(`Users`, usersFromDatabase);
+        setUsers(usersFromDatabase);
+      }
+    }
+
+    if (users === null) getUsersFromDatabase();
+
   }, [users, projects, title, authors, authorEmail])
   
   return (
