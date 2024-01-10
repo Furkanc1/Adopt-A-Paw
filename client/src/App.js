@@ -4,6 +4,7 @@ import Home from './pages/home/Home';
 import About from './pages/about/About';
 import Resume from './pages/resume/Resume';
 import SignIn from './pages/sign-in/Sign-In';
+import SignUp from './pages/sign-up/Sign-Up';
 import Profile from './pages/profile/Profile';
 import Contact from './pages/contact/Contact';
 import Portfolio from './pages/portfolio/Portfolio';
@@ -18,7 +19,7 @@ export const StateContext = createContext({});
 
 export const getUsers = async () => {
   try {
-    let usersResponse = await fetch(`http://localhost:3001/users`);
+    let usersResponse = await fetch(`http://localhost:3001/api/users`);
     if (usersResponse.status === 200) {
       let usersData = await usersResponse.json();
       if (Array.isArray(usersData)) {
@@ -33,6 +34,7 @@ export const getUsers = async () => {
 export default function App() {
   // Store things in useState that you want to access across your application (or things that update)
   // let [projects, setProjects] = useState(getGithubData());
+  let [user, setUser] = useState(null);
   let [users, setUsers] = useState(null);
   let [title, setTitle] = useState(appTitle);
   let [authors, setAuthors] = useState(appAuthors);
@@ -44,6 +46,7 @@ export default function App() {
     if (authors === ``) setAuthors(appAuthors);
     if (authorEmail === ``) setAuthorEmail(appEmail);
     if (projects.length === 0) setProjects(projectsUsedAcrossApplication);
+    if (user != null) setUser(null);
 
     const getUsersFromDatabase = async () => {
       let usersFromDatabase = await getUsers();
@@ -55,10 +58,10 @@ export default function App() {
 
     if (users === null) getUsersFromDatabase();
 
-  }, [users, projects, title, authors, authorEmail])
+  }, [user, users, projects, title, authors, authorEmail])
   
   return (
-    <StateContext.Provider value={{ users, title, logo, projects, authors, authorEmail }}>
+    <StateContext.Provider value={{ user, users, title, logo, projects, authors, authorEmail }}>
       <div className="App">
         <Router>
           <Routes>
@@ -87,6 +90,10 @@ export default function App() {
             <Route path={`/signin`} element={<SignIn />} />
             <Route path={`/signing`} element={<SignIn />} />
             <Route path={`/sign-in`} element={<SignIn />} />
+
+            <Route path={`/signup`} element={<SignUp />} />
+            <Route path={`/sign-up`} element={<SignUp />} />
+            <Route path={`/register`} element={<SignUp />} />
 
           </Routes>
         </Router>

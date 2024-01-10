@@ -4,6 +4,8 @@ const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
 
+const { ApolloClient, InMemoryCache, gql } = require('@apollo/client');
+
 const typeDefs = require('./schemas/typeDefs');
 const resolvers = require('./schemas/resolvers');
 const db = require('./config/connection');
@@ -67,7 +69,7 @@ const startApolloServer = async () => {
   // });
 
   // Using Apollo GraphQL
-  app.get('/all', async (req, res) => {
+  app.get('/api/all', async (req, res) => {
     try {
       const result = await server.executeOperation({
         query: `query all {
@@ -92,7 +94,7 @@ const startApolloServer = async () => {
     }
   });
   
-  app.get('/users', async (req, res) => {
+  app.get('/api/users', async (req, res) => {
     try {
       const result = await server.executeOperation({
         query: `query users {
@@ -110,7 +112,46 @@ const startApolloServer = async () => {
     }
   });
 
-  app.get('/pets', async (req, res) => {
+  // Assuming server is the Apollo Server instance
+  const apolloServerUrl = 'http://localhost:3001/graphql'; // Replace with your Apollo Server endpoint
+  const client = new ApolloClient({
+    uri: apolloServerUrl,
+    cache: new InMemoryCache(),
+  });
+
+  app.post('/api/users', async (req, res) => {
+    try {
+      const { data } = await client.query({
+        query: gql`
+          query {
+            users {
+              email
+              username,
+              password,
+            }
+          }
+        `,
+      });
+
+      const newUser = new User(req.body);
+      await newUser.validate();
+
+      const savedUser = await newUser.save();
+  
+      res.status(200).json(savedUser);
+    } catch (error) {
+      if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
+        res.status(400).json({ error: 'Email already exists.' });
+      } else if (error.code === 11000 && error.keyPattern && error.keyPattern.username) {
+        res.status(400).json({ error: 'Username already exists.' });
+      } else {
+        res.status(500).send(`Error Adding User: ${error.message}`);
+      }
+      // res.status(500).send(`Error Adding User: ${error}`);
+    }
+  });
+
+  app.get('/api/pets', async (req, res) => {
     try {
       const result = await server.executeOperation({
         query: `query pets {

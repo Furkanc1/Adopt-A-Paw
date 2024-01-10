@@ -12,6 +12,15 @@ const typeDefs = `
     email: String!
   }
 
+  input NewUserInput {
+    email: String!
+    username: String!
+  }
+
+  type Mutation {
+    addUser(newUser: NewUserInput): User
+  }
+
   type Pet {
     _id: ID!
     name: String!

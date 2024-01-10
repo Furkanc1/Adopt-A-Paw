@@ -14,12 +14,15 @@
   "author": "alux, furk, isaiah",
   "license": "ISC",
   "dependencies": {
+    "@apollo/client": "^3.8.9",
     "@apollo/server": "^4.10.0",
+    "apollo-server-express": "^3.13.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "graphql": "^16.8.1",
-    "mongoose": "^8.0.3"
+    "mongoose": "^8.0.3",
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

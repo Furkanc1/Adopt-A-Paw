@@ -10,6 +10,7 @@ export default function SignIn() {
                 <Section title={`Sign In`} />
                 <section id={`signin`} className={`signinContentSection flex alignCenter justifyCenter flexColumn`} style={{padding: 15}}>
                     <h2>Sign In</h2>
+                    {/* <form id={`signInForm`} className={`signIn`}></form> */}
                 </section>
             </main>
             <Footer />

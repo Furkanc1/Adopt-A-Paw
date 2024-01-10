@@ -3,7 +3,7 @@ import { StateContext } from '../../App';
 import { useContext, useEffect, useState } from 'react';
 
 export default function Header() {
-    let { title, authors } = useContext(StateContext); // State Context runs whenever the component that creates the context runs
+    let { title, authors, user } = useContext(StateContext); // State Context runs whenever the component that creates the context runs
     let [pageName, setPageName] = useState(window.location.pathname); // Local state will run anytime the component its inside of loads or unloads
 
     // Runs anytime THIS component (that the use effect is inside of) is loaded or unloaded.
@@ -45,7 +45,10 @@ export default function Header() {
                             <Link className={`${pageName === `/contact` ? `activePage` : `` }`} to={`/contact`}>Contact</Link>
                         </li>
                         <li className={`buttonLink`}>
-                            <Link to={`/sign-in`} className={`mainColorLink mainColorLinkAlt ${pageName === `/sign-in` ? `activePage` : `` }`}>Sign In</Link>
+                            {user == null ? <Link to={`/sign-in`} className={`mainColorLink mainColorLinkAlt ${pageName === `/sign-in` ? `activePage` : `` }`}>Sign In</Link> : `Sign Out`}
+                        </li>
+                        <li className={`buttonLink`}>
+                            {user == null ? <Link to={`/sign-up`} className={`mainColorLink mainColorLinkAlt ${pageName === `/sign-up` ? `activePage` : `` }`}>Sign Up</Link> : `Sign Out`}
                         </li>
                     </ul>
                 </nav>
