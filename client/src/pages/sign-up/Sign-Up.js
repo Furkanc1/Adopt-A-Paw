@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { StateContext } from '../../App';
 import { useState, useContext } from 'react';
 import { useMutation, gql } from '@apollo/client';
@@ -42,7 +43,7 @@ export default function SignUp() {
           let emailHasValidDomain = validDomains.includes(emailDomain);
           if (emailHasValidDomain == true) {
             if (userEmails.includes(value)) {
-              setSignUpEmailError(`This email has already been registered`);
+              setSignUpEmailError(<div>This email has already been registered, <Link to={`/sign-in`} className={`mainColorLink mainColorLinkAlt `}>Sign In</Link></div>);
             } else {
               setSignUpEmailError(``);
             }
@@ -60,7 +61,7 @@ export default function SignUp() {
 
       if (value.length >= 3) {
         if (usernames.includes(value)) {
-          setSignUpUsernameError(`Username is already registered`);
+          setSignUpUsernameError(<div>Username is already registered, <Link to={`/sign-in`} className={`mainColorLink mainColorLinkAlt `}>Sign In</Link></div>);
         } else {
           setSignUpUsernameError(``);
         }

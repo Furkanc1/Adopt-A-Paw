@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { StateContext } from '../../App';
 import { useContext, useState } from 'react';
 import Header from '../../components/header/Header';
@@ -13,14 +14,16 @@ export default function SignIn() {
         let { name, value } = e.target;
         let usernames = users.map(usr => usr.username);
         let userEmails = users.map(usr => usr.email.toLowerCase());
-        let userLogins = [...usernames, ...userEmails];
+        let userLogins = [...usernames, ...userEmails].sort((firstItem, nextItem) => firstItem.length - nextItem.length);
+        let minLength = userLogins[0].length;
+        // let maxLength = userLogins.pop().length;
 
         if (name == `loginName`) {
-            if ((value.length >= 3 && !value.includes(`@`)) || (value.length >= 7 && value.includes(`@`))) {
+            if ((value.length >= minLength && !value.includes(`@`)) || (value.length >= 7 && value.includes(`@`))) {
                 if (userLogins.includes(value)) {
                     setLogInNameError(``);
                 } else {
-                    setLogInNameError(`This user has not been registered yet`);
+                    setLogInNameError(<div>This user has not been registered yet, <Link to={`/sign-up`} className={`mainColorLink mainColorLinkAlt `}>Sign Up</Link></div>);
                 }
             } else {
                 setLogInNameError(``);
