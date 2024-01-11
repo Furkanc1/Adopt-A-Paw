@@ -10,6 +10,7 @@ export const signUpDevLogs = false;
 export default function SignUp() {
   let { users, setUsers } = useContext(StateContext);
   let [formData, setFormData] = useState({});
+  let [signUpUsernameError, setSignUpUsernameError] = useState(``);
   let [signUpEmailError, setSignUpEmailError] = useState(``);
 
   const [addUserMutation, { loading, error, data }] = useMutation(gql`
@@ -54,6 +55,16 @@ export default function SignUp() {
       } else {
         setSignUpEmailError(``);
       }
+    } else if (name == `username`) {
+      let usernames = users.map(usr => usr.username);
+
+      if (value.length >= 3) {
+        if (usernames.includes(value)) {
+          setSignUpUsernameError(`Username is already registered`);
+        } else {
+          setSignUpUsernameError(``);
+        }
+      }
     }
 
     setFormData(prevFormData => ({
@@ -66,14 +77,14 @@ export default function SignUp() {
     e.preventDefault();
   
     try {
-      let { email, password } = formData;
+      let { email, password, username } = formData;
       if (signUpEmailError == ``) {
         const { data } = await addUserMutation({
           variables: {
             newUser: {
               email,
               password,
-              username: formData.email + `-${users.length + 1}`,
+              username,
             },
           },
         });
@@ -107,6 +118,8 @@ export default function SignUp() {
         <section id={`signup`} className={`signupContentSection flex alignCenter justifyCenter flexColumn`} style={{padding: 15}}>
           <h2>Sign Up {users && Array.isArray(users) && <div className={`usersDiv`}>{users.length} User(s)</div>}</h2>
           <form onChange={(e) => updateFormState(e)} onSubmit={(e) => onFormSubmit(e)} id={`signUpForm`} className={`flex flexColumn gap5 signUpForm registrationForm`}>
+            <input id={`username`} name={`username`} placeholder={`Enter Username...`} type={`text`} required />
+            {signUpUsernameError != `` && <div className={`signUpUsernameError errorMessage`}>{signUpUsernameError}</div>}
             <input id={`email`} name={`email`} placeholder={`Enter Email...`} type={`email`} required />
             {signUpEmailError != `` && <div className={`signUpEmailError errorMessage`}>{signUpEmailError}</div>}
             <input id={`password`} name={`password`} placeholder={`Enter Password...`} type={`password`} required />
