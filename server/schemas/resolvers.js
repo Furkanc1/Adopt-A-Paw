@@ -4,9 +4,9 @@ const resolvers = {
   Mutation: {
     addUser: async (_, { newUser }) => {
       try {
-        const user = new User(newUser);
-        await user.validate();
-        const savedUser = await user.save();
+        const userToSave = new User(newUser);
+        await userToSave.validate();
+        const savedUser = await userToSave.save();
         return savedUser;
       } catch (error) {
         throw new Error(`Error Adding User: ${error.message}`);

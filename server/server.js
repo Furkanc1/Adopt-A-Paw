@@ -1,15 +1,13 @@
-const express = require('express');
-const cors = require('cors');
-const { ApolloServer } = require('@apollo/server');
-const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
-
-const { ApolloClient, InMemoryCache, gql } = require('@apollo/client');
-
+const cors = require('cors');
+const express = require('express');
+const fetch = require('cross-fetch');
+const db = require('./config/connection');
 const typeDefs = require('./schemas/typeDefs');
 const resolvers = require('./schemas/resolvers');
-const db = require('./config/connection');
-// const { User, Pet } = require('./schemas');
+const { ApolloServer } = require('@apollo/server');
+const { expressMiddleware } = require('@apollo/server/express4');
+const { ApolloClient, InMemoryCache, gql, HttpLink } = require('@apollo/client');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -77,6 +75,7 @@ const startApolloServer = async () => {
             _id,
             email,
             username,
+            password,
           },
           pets {
             _id,
@@ -102,6 +101,7 @@ const startApolloServer = async () => {
             _id,
             email,
             username,
+            password,
           }
         }`
       });
@@ -117,6 +117,7 @@ const startApolloServer = async () => {
   const client = new ApolloClient({
     uri: apolloServerUrl,
     cache: new InMemoryCache(),
+    link: new HttpLink({ uri: '/graphql', fetch }),
   });
 
   app.post('/api/users', async (req, res) => {
@@ -127,7 +128,6 @@ const startApolloServer = async () => {
             users {
               email
               username,
-              password,
             }
           }
         `,

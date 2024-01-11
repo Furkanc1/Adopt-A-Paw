@@ -22,9 +22,7 @@ export const getUsers = async () => {
     let usersResponse = await fetch(`http://localhost:3001/api/users`);
     if (usersResponse.status === 200) {
       let usersData = await usersResponse.json();
-      if (Array.isArray(usersData)) {
-        return usersData;
-      }
+      if (Array.isArray(usersData)) return usersData;
     }
   } catch (error) {
     console.log(`Server Error`, error);
@@ -61,7 +59,7 @@ export default function App() {
   }, [user, users, projects, title, authors, authorEmail])
   
   return (
-    <StateContext.Provider value={{ user, users, title, logo, projects, authors, authorEmail }}>
+    <StateContext.Provider value={{ user, users, setUsers, title, logo, projects, authors, authorEmail }}>
       <div className="App">
         <Router>
           <Routes>
