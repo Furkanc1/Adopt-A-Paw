@@ -114,7 +114,9 @@ export default function SignUp() {
     <>
       <Header />
       <main>
-        <Section title={`Sign Up`} />
+       <Section title={`Sign Up`}>
+          <p className={`scrollMessage`}>Scroll below to Form</p>
+        </Section>
         <section id={`signup`} className={`signupContentSection flex alignCenter justifyCenter flexColumn`} style={{padding: 15}}>
           <h2>Sign Up {users && Array.isArray(users) && <div className={`usersDiv`}>{users.length} User(s)</div>}</h2>
           <form onChange={(e) => updateFormState(e)} onSubmit={(e) => onFormSubmit(e)} id={`signUpForm`} className={`flex flexColumn gap5 signUpForm registrationForm`}>
