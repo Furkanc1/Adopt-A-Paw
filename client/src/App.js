@@ -49,8 +49,17 @@ export default function App() {
     const getUsersFromDatabase = async () => {
       let usersFromDatabase = await getUsers();
       if (usersFromDatabase) {
-        console.log(`Users`, usersFromDatabase);
-        setUsers(usersFromDatabase);
+        let modifiedUsers = usersFromDatabase.map((usr, usrIndex) => {
+          return {
+            ...usr,
+            index: usrIndex,
+            mongoDBID: usr._id,
+            token: `JWT Authentication Token will go here`,
+          }
+        });
+
+        console.log(`Users`, modifiedUsers);
+        setUsers(modifiedUsers);
       }
     }
 
