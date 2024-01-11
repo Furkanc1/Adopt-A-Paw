@@ -51,7 +51,7 @@ export default function SignUp() {
         setUsers(prevUsers => [...prevUsers, data.addUser]);
       }
     } catch (error) {
-      console.error(`Error adding user`, error.message);
+      console.log(`Error adding user`, error);
       console.log(`GraphQL errors`, error.graphQLErrors);
       console.log(`Network errors`, error.networkError);
     }
