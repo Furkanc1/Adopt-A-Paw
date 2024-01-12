@@ -21,6 +21,15 @@ const typeDefs = `
     addUser(newUser: NewUserInput): User
   }
 
+  type Mutation {
+    signIn(email: String!, password: String!): AuthPayload
+  }
+
+  type AuthPayload {
+    token: String
+    user: User
+  }
+
   type Pet {
     _id: ID!
     name: String!

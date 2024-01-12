@@ -10,7 +10,7 @@ import Contact from './pages/contact/Contact';
 import Portfolio from './pages/portfolio/Portfolio';
 import { projectsUsedAcrossApplication } from './helper';
 import { createContext, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 export const appTitle = `Adopt-A-Paw`;
 export const appEmail = `plutocoding@gmail.com`;
@@ -45,7 +45,6 @@ export default function App() {
     if (authors === ``) setAuthors(appAuthors);
     if (authorEmail === ``) setAuthorEmail(appEmail);
     if (projects.length === 0) setProjects(projectsUsedAcrossApplication);
-    if (user != null) setUser(null);
 
     const getUsersFromDatabase = async () => {
       let usersFromDatabase = await getUsers();
@@ -66,10 +65,18 @@ export default function App() {
 
     if (users === null) getUsersFromDatabase();
 
+    if (user === null) {
+      let storedUser = JSON.parse(localStorage.getItem(`user`));
+      if (storedUser) {
+        console.log(`User`, storedUser);
+        setUser(storedUser);
+      }
+    }
+
   }, [user, users, projects, title, authors, authorEmail])
   
   return (
-    <StateContext.Provider value={{ user, users, setUsers, title, logo, projects, authors, authorEmail, credentials, setCredentials }}>
+    <StateContext.Provider value={{ user, users, setUser, setUsers, title, logo, projects, authors, authorEmail, credentials, setCredentials }}>
       <div className="App">
         <Router>
           <Routes>
@@ -82,7 +89,7 @@ export default function App() {
             <Route path={`/about-us`} element={<About />} />
             <Route path={`/aboutUs`} element={<About />} />
 
-            <Route path={`/profile`} element={<Profile />} />
+            <Route path={`/profile`} element={user != null ? <Profile /> : <Navigate to={`/`} />} />
             <Route path={`/portfolio`} element={<Portfolio />} />
             
             <Route path={`/resume`} element={<Resume />} />
@@ -93,15 +100,15 @@ export default function App() {
             <Route path={`/contact-me`} element={<Contact />} />
             <Route path={`/contact-us`} element={<Contact />} />
             
-            <Route path={`/login`} element={<SignIn />} />
-            <Route path={`/log-in`} element={<SignIn />} />
-            <Route path={`/signin`} element={<SignIn />} />
-            <Route path={`/signing`} element={<SignIn />} />
-            <Route path={`/sign-in`} element={<SignIn />} />
+            <Route path={`/login`} element={user == null ? <SignIn /> : <Navigate to={`/profile`} />} />
+            <Route path={`/log-in`} element={user == null ? <SignIn /> : <Navigate to={`/profile`} />} />
+            <Route path={`/signin`} element={user == null ? <SignIn /> : <Navigate to={`/profile`} />} />
+            <Route path={`/signing`} element={user == null ? <SignIn /> : <Navigate to={`/profile`} />} />
+            <Route path={`/sign-in`} element={user == null ? <SignIn /> : <Navigate to={`/profile`} />} />
 
-            <Route path={`/signup`} element={<SignUp />} />
-            <Route path={`/sign-up`} element={<SignUp />} />
-            <Route path={`/register`} element={<SignUp />} />
+            <Route path={`/signup`} element={user == null ? <SignUp /> : <Navigate to={`/profile`} />} />
+            <Route path={`/sign-up`} element={user == null ? <SignUp /> : <Navigate to={`/profile`} />} />
+            <Route path={`/register`} element={user == null ? <SignUp /> : <Navigate to={`/profile`} />} />
 
           </Routes>
         </Router>

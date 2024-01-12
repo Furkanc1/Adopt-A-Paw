@@ -1,6 +1,7 @@
 const path = require('path');
 const cors = require('cors');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const fetch = require('cross-fetch');
 const db = require('./config/connection');
 const typeDefs = require('./schemas/typeDefs');
@@ -11,6 +12,8 @@ const { ApolloClient, InMemoryCache, gql, HttpLink } = require('@apollo/client')
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+let secret = `secret-key`;
+let token = null;
 
 // Replace this whatever deployment service we use
 // export const liveLink = `http://adoptapet.com`;
@@ -24,6 +27,19 @@ app.use(cors({
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req }) => {
+
+    token = req.headers.authorization || req.cookies.jwtToken;
+    console.log(`Token`, token);
+
+    try {
+      let userAuth = jwt.verify(token, secret);
+      console.log(`User Authenticated`, userAuth);
+      return { user: userAuth };
+    } catch (error) {
+      return { user: null };
+    }
+  }
 });
 
 const startApolloServer = async () => {
@@ -117,7 +133,13 @@ const startApolloServer = async () => {
   const client = new ApolloClient({
     uri: apolloServerUrl,
     cache: new InMemoryCache(),
-    link: new HttpLink({ uri: '/graphql', fetch }),
+    link: new HttpLink({ 
+      fetch,
+      uri: '/graphql', 
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    }),
   });
 
   app.post('/api/users', async (req, res) => {
