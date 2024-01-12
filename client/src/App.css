@@ -2,6 +2,7 @@
   --bg: #282c34;
   --main: #21DDF7;
   --error: #970a0a;
+  --petCardSize: 180px;
   --bgLight: #586a8e;
   --secondary: #d515d5;
   --cardShadow: 0 0 4px 0px rgba(0, 0, 0, 0.25);
@@ -115,6 +116,18 @@ section {
   border-radius: 15px;
   padding-bottom: 15px;
   box-shadow: var(--cardShadow);
+}
+
+.pets {
+  width: 90%;
+  flex-wrap: wrap;
+  margin: 0 auto 35px;
+}
+
+.pet {
+  width: var(--petCardSize);
+  min-width: var(--petCardSize);
+  max-width: var(--petCardSize);
 }
 
 .petForm {

@@ -12,7 +12,7 @@ export default function Pets({showForm}) {
             {showForm && user != null && <>
                 <PetForm />
             </>}
-            <div className={`pets flex justifySpaceBetween gap15`}>
+            <div className={`pets flex gap15`}>
                 {pets != null && Array.isArray(pets) ? <>
                     {pets.length > 0 ? <>
                         {pets.map((pet, petIndex) => {
