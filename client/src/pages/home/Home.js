@@ -13,7 +13,7 @@ export default function Home() {
             <main>
                 <Section title={title} />
                 <section id={`homePage`} className={`homePageSection flex alignCenter justifyCenter`}>
-                    <Pets />
+                    <Pets showForm={true} />
                 </section>
             </main>
             <Footer />
