@@ -1,4 +1,4 @@
-import { StateContext } from '../../App';
+import { StateContext, inDevEnv } from '../../App';
 import { useContext, useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import Header from '../../components/header/Header';
@@ -34,9 +34,9 @@ export default function SignIn() {
 
     const updateFormState = (e) => {
         let { name, value } = e.target;
-        let usernames = users.map(usr => usr.username);
+        // let usernames = users.map(usr => usr.username);
         let userEmails = users.map(usr => usr.email.toLowerCase());
-        let userLogins = [...usernames, ...userEmails].sort((firstItem, nextItem) => firstItem.length - nextItem.length);
+        let userLogins = [...userEmails].sort((firstItem, nextItem) => firstItem.length - nextItem.length);
         let minLength = userLogins && Array.isArray(userLogins) && userLogins.length > 0 ? userLogins[0].length : 3;
 
         if (name == `loginName`) {
@@ -79,7 +79,7 @@ export default function SignIn() {
             // Successfull Sign In
             setUser(userToSignIn);
             localStorage.setItem(`user`, JSON.stringify(userToSignIn));
-            console.log(`User Signed In Successfully`, userToSignIn);
+            inDevEnv() && console.log(`User Signed In Successfully`, userToSignIn);
             e.target.reset();
             navigate(`/`);
 
@@ -121,7 +121,7 @@ export default function SignIn() {
                 <section id={`signin`} className={`signinContentSection flex alignCenter justifyCenter flexColumn`} style={{padding: 15}}>
                     <h2>Sign In{users && Array.isArray(users) && <div className={`usersDiv`}>{users.length} User(s)</div>}</h2>
                     <form onFocus={() => onFormFocus()} onChange={(e) => updateFormState(e)} onSubmit={(e) => onFormSubmit(e)} id={`signInForm`} className={`flex flexColumn gap5 signInForm registrationForm`}>
-                        <input id={`loginName`} defaultValue={() => setDefaultLogin()} name={`loginName`} placeholder={`Enter Email or Username...`} type={`text`} required />
+                        <input id={`loginName`} defaultValue={() => setDefaultLogin()} name={`loginName`} placeholder={`Enter Email...`} type={`email`} required />
                         {logInNameError != `` && <div className={`logInNameError errorMessage`}>{logInNameError}</div>}
                         <input id={`password`} name={`password`} placeholder={`Enter Password...`} type={`password`} required />
                         {signInError != `` && <div className={`signInError errorMessage`}>{signInError}</div>}

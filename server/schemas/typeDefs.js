@@ -9,6 +9,8 @@ const typeDefs = `
     username: String!
     email: String!
     password: String!
+    createdAt: String
+    updatedAt: String
   }
 
   input NewUserInput {

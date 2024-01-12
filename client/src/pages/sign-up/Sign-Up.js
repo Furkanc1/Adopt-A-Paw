@@ -1,4 +1,4 @@
-import { StateContext } from '../../App';
+import { StateContext, inDevEnv } from '../../App';
 import { useState, useContext } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import Header from '../../components/header/Header';
@@ -94,7 +94,7 @@ export default function SignUp() {
         // Successfull Sign Up
         let userSignedUp = data.addUser;
         if (userSignedUp != null && userSignedUp != undefined) {
-          console.log(`User Signed Up Successfully`, userSignedUp);
+          inDevEnv() && console.log(`User Signed Up Successfully`, userSignedUp);
           setUsers(prevUsers => [...prevUsers, userSignedUp]);
           setCredentials(userSignedUp);
           e.target.reset();

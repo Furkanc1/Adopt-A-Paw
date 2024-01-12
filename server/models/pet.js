@@ -16,6 +16,11 @@ const petSchema = new Schema({
         type: Boolean, 
         default: false
     },
+}, {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
 });
 
 const Pet = model('Pet', petSchema);

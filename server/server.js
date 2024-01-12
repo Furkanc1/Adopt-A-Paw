@@ -118,6 +118,8 @@ const startApolloServer = async () => {
             email,
             username,
             password,
+            createdAt,
+            updatedAt
           }
         }`
       });

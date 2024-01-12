@@ -16,6 +16,9 @@ export const appTitle = `Adopt-A-Paw`;
 export const appEmail = `plutocoding@gmail.com`;
 export const appAuthors = `Alex, Fuf, & Isaiah`;
 export const StateContext = createContext({});
+console.log(`Welcome to Adopt A Paw`);
+// This is to help us know what environment we are in. Are we in the local developer environment, or the deployed production environment?
+export const inDevEnv = () => window && window.location.host.includes(`local`);
 
 export const getUsers = async () => {
   try {
@@ -71,16 +74,20 @@ export default function App() {
     const getUsersFromDatabase = async () => {
       let usersFromDatabase = await getUsers();
       if (usersFromDatabase) {
-        let modifiedUsers = usersFromDatabase.map((usr, usrIndex) => {
+        let modifiedUsers = usersFromDatabase.map((usr) => {
+          let createdAt = new Date(parseFloat(usr.createdAt)).toLocaleString();
+          let updatedAt = new Date(parseFloat(usr.updatedAt)).toLocaleString();
+
+          delete usr.password;
+
           return {
             ...usr,
-            index: usrIndex,
-            mongoDBID: usr._id,
-            token: usr.token || `JWT Authentication Token will go here`,
+            createdAt,
+            updatedAt
           }
         });
 
-        console.log(`Users`, modifiedUsers);
+        inDevEnv() && console.log(`Users`, modifiedUsers);
         setUsers(modifiedUsers);
       }
     }
@@ -90,7 +97,7 @@ export default function App() {
     if (user === null) {
       let storedUser = JSON.parse(localStorage.getItem(`user`));
       if (storedUser) {
-        console.log(`User`, storedUser);
+        inDevEnv() && console.log(`User`, storedUser);
         setUser(storedUser);
       }
     }
