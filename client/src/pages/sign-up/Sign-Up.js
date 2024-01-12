@@ -1,15 +1,16 @@
-import { Link } from 'react-router-dom';
 import { StateContext } from '../../App';
 import { useState, useContext } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
+import { Link, useNavigate } from 'react-router-dom';
 import Section from '../../components/section/Section';
 
 export const signUpDevLogs = false;
 
 export default function SignUp() {
-  let { users, setUsers } = useContext(StateContext);
+  const navigate = useNavigate();
+  let { users, setUsers, setCredentials } = useContext(StateContext);
   let [formData, setFormData] = useState({});
   let [signUpUsernameError, setSignUpUsernameError] = useState(``);
   let [signUpEmailError, setSignUpEmailError] = useState(``);
@@ -90,10 +91,14 @@ export default function SignUp() {
           },
         });
   
-        if (data.addUser != null && data.addUser != undefined) {
-          console.log(`User added successfully`, data.addUser);
-          setUsers(prevUsers => [...prevUsers, data.addUser]);
+        // Successfull Sign Up
+        let userSignedUp = data.addUser;
+        if (userSignedUp != null && userSignedUp != undefined) {
+          console.log(`User Signed Up Successfully`, userSignedUp);
+          setUsers(prevUsers => [...prevUsers, userSignedUp]);
+          setCredentials(userSignedUp);
           e.target.reset();
+          navigate(`/sign-in`);
         }
       }
     } catch (error) {

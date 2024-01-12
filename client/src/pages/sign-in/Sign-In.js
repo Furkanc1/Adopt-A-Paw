@@ -1,12 +1,13 @@
-import { Link } from 'react-router-dom';
 import { StateContext } from '../../App';
 import { useContext, useState } from 'react';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
+import { Link, useNavigate } from 'react-router-dom';
 import Section from '../../components/section/Section';
 
 export default function SignIn() {
-    let { users } = useContext(StateContext);
+    const navigate = useNavigate();
+    let { users, credentials } = useContext(StateContext);
     let [formData, setFormData] = useState({});
     let [logInNameError, setLogInNameError] = useState(``);
 
@@ -41,8 +42,17 @@ export default function SignIn() {
       
         try {
             let { loginName, password } = formData;
-            console.log(`Sign In Form Submit`, { loginName, password });
+
+            let userToSignIn = {
+                password,
+                email: loginName
+            }
+
+            // Successfull Sign In
+            console.log(`User Signed In Successfully`, userToSignIn);
             e.target.reset();
+            navigate(`/`);
+
         } catch (error) {
             console.log(`Error Signing In`, error);
         }
@@ -66,7 +76,7 @@ export default function SignIn() {
                 <section id={`signin`} className={`signinContentSection flex alignCenter justifyCenter flexColumn`} style={{padding: 15}}>
                     <h2>Sign In{users && Array.isArray(users) && <div className={`usersDiv`}>{users.length} User(s)</div>}</h2>
                     <form onChange={(e) => updateFormState(e)} onSubmit={(e) => onFormSubmit(e)} id={`signUpForm`} className={`flex flexColumn gap5 signUpForm registrationForm`}>
-                        <input id={`loginName`} name={`loginName`} placeholder={`Enter Email or Username...`} type={`text`} required />
+                        <input id={`loginName`} defaultValue={credentials == null ? `` : credentials.email} name={`loginName`} placeholder={`Enter Email or Username...`} type={`text`} required />
                         {logInNameError != `` && <div className={`logInNameError errorMessage`}>{logInNameError}</div>}
                         <input id={`password`} name={`password`} placeholder={`Enter Password...`} type={`password`} required />
                         <button type={`submit`} className={`${isFormSubmitDisabled() == true ? `disabled` : ``}`} disabled={isFormSubmitDisabled()}>Submit</button>

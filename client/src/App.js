@@ -36,6 +36,7 @@ export default function App() {
   let [users, setUsers] = useState(null);
   let [title, setTitle] = useState(appTitle);
   let [authors, setAuthors] = useState(appAuthors);
+  let [credentials, setCredentials] = useState(null);
   let [authorEmail, setAuthorEmail] = useState(appEmail);
   let [projects, setProjects] = useState(projectsUsedAcrossApplication);
 
@@ -54,7 +55,7 @@ export default function App() {
             ...usr,
             index: usrIndex,
             mongoDBID: usr._id,
-            token: `JWT Authentication Token will go here`,
+            token: usr.token || `JWT Authentication Token will go here`,
           }
         });
 
@@ -68,7 +69,7 @@ export default function App() {
   }, [user, users, projects, title, authors, authorEmail])
   
   return (
-    <StateContext.Provider value={{ user, users, setUsers, title, logo, projects, authors, authorEmail }}>
+    <StateContext.Provider value={{ user, users, setUsers, title, logo, projects, authors, authorEmail, credentials, setCredentials }}>
       <div className="App">
         <Router>
           <Routes>
