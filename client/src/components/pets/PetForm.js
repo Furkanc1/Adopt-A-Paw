@@ -2,7 +2,7 @@ import { StateContext } from "../../App";
 import { useState, useContext } from "react";
 
 export default function PetForm() {
-    let { user } = useContext(StateContext);
+    let { user, setPets } = useContext(StateContext);
     let [formData, setFormData] = useState({});
 
     const updateFormState = (e) => {
@@ -23,6 +23,7 @@ export default function PetForm() {
         }
 
         console.log(`Add Pet`, petToAdd);
+        setPets(prevPets => [...prevPets, petToAdd]);
         e.target.reset();
     }
 

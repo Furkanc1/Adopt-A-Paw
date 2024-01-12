@@ -45,6 +45,7 @@ export default function App() {
   // Store things in useState that you want to access across your application (or things that update)
   // let [projects, setProjects] = useState(getGithubData());
   let [user, setUser] = useState(null);
+  // We already have a call for pets in the beginning of the app, we are just going to pass it down into profile component. (We have access to the pets because of previously putting the pet card in state)
   let [pets, setPets] = useState([{
     age: 5,
     name: `Doggo`,
