@@ -86,6 +86,7 @@ export default function SignIn() {
         } catch (error) {
             let { loginName, password } = formData;
             console.log(`Error Signing In`, {error, loginName, password});
+            setSignInError(`Error Signing In`);
             if (error.message.includes(`Invalid Credentials`)) {
                 setSignInError(`Invalid Email, Username, or Password`);
             }

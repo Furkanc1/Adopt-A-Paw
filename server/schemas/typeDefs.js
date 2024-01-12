@@ -36,6 +36,9 @@ const typeDefs = `
     species: String!
     age: Int
     adopted: Boolean
+    publicImageURL: String
+    ownerId: String
+    creatorId: String!
   }
 `;
 

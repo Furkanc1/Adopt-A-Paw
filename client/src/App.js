@@ -33,6 +33,28 @@ export default function App() {
   // Store things in useState that you want to access across your application (or things that update)
   // let [projects, setProjects] = useState(getGithubData());
   let [user, setUser] = useState(null);
+  let [pets, setPets] = useState([{
+    age: 5,
+    name: `Doggo`,
+    species: `Cat`,
+    adopted: false,
+    creatorId: `65a09f306c7fb01830dfb58d`,
+    publicImageURL: `https://naturvet.com/cdn/shop/articles/shutterstock_1640876206.jpg?v=1691013127`,
+  }, {
+    age: 5,
+    name: `Doggo`,
+    species: `Cat`,
+    adopted: false,
+    creatorId: `65a09f306c7fb01830dfb58d`,
+    publicImageURL: `https://naturvet.com/cdn/shop/articles/shutterstock_1640876206.jpg?v=1691013127`,
+  }, {
+    age: 5,
+    name: `Doggo`,
+    species: `Cat`,
+    adopted: false,
+    creatorId: `65a09f306c7fb01830dfb58d`,
+    publicImageURL: `https://naturvet.com/cdn/shop/articles/shutterstock_1640876206.jpg?v=1691013127`,
+  }]);
   let [users, setUsers] = useState(null);
   let [title, setTitle] = useState(appTitle);
   let [authors, setAuthors] = useState(appAuthors);
@@ -76,7 +98,7 @@ export default function App() {
   }, [user, users, projects, title, authors, authorEmail])
   
   return (
-    <StateContext.Provider value={{ user, users, setUser, setUsers, title, logo, projects, authors, authorEmail, credentials, setCredentials }}>
+    <StateContext.Provider value={{ user, users, setUser, setUsers, pets, setPets, title, logo, projects, authors, authorEmail, credentials, setCredentials }}>
       <div className="App">
         <Router>
           <Routes>
