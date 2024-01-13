@@ -92,6 +92,8 @@ const startApolloServer = async () => {
             email,
             username,
             password,
+            createdAt,
+            updatedAt
           },
           pets {
             _id,
@@ -99,6 +101,8 @@ const startApolloServer = async () => {
             name,
             species,
             adopted,
+            createdAt,
+            updatedAt
           }
         }, `
       });
@@ -174,6 +178,33 @@ const startApolloServer = async () => {
       // res.status(500).send(`Error Adding User: ${error}`);
     }
   });
+  
+  app.post('/api/pets', async (req, res) => {
+    try {
+      const { data } = await client.query({
+        query: gql`
+          query {
+            pets {
+              age,
+              name,
+              species,
+              adopted,
+              creatorId,
+            }
+          }
+        `,
+      });
+
+      const newPet = new Pet(req.body);
+      await newPet.validate();
+
+      const savedPet = await newPet.save();
+  
+      res.status(200).json(savedPet);
+    } catch (error) {
+      res.status(500).send(`Error Adding Pet: ${error}`);
+    }
+  });
 
   app.get('/api/pets', async (req, res) => {
     try {
@@ -185,6 +216,9 @@ const startApolloServer = async () => {
             name,
             species,
             adopted,
+            creatorId,
+            createdAt,
+            updatedAt
           }
         }`
       });

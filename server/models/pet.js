@@ -3,6 +3,7 @@ const { Schema, model } = require('mongoose');
 
 const petSchema = new Schema({
     age: { type: Number },
+    ownerId: { type: String },
     creatorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     name: { 
         type: String, 

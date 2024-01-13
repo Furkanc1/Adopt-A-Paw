@@ -33,6 +33,16 @@ const resolvers = {
         throw new Error(`Error Adding User: ${error.message}`);
       }
     },
+    addPet: async (_, { newPet }) => {
+      try {
+        const petToSave = new Pet(newPet);
+        await petToSave.validate();
+        const savedPet = await petToSave.save();
+        return savedPet;
+      } catch (error) {
+        throw new Error(`Error Adding Pet: ${error.message}`);
+      }
+    },
   },
   Query: {
     users: async () => {
@@ -42,7 +52,7 @@ const resolvers = {
     pets: async () => {
       let pets = await Pet.find();
       return pets;
-   }
+    }
   }
 }
 

@@ -1,6 +1,6 @@
-import { StateContext, inDevEnv } from '../../App';
 import { useState, useContext } from 'react';
 import { useMutation, gql } from '@apollo/client';
+import { StateContext, inDevEnv } from '../../App';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import { Link, useNavigate } from 'react-router-dom';
@@ -25,9 +25,9 @@ export default function SignUp() {
     }
   `);
 
-  if (loading && signUpDevLogs == true) console.log(`Loading`, loading);
-  if (error && signUpDevLogs == true) console.log(`Error`, error);
-  if (data && signUpDevLogs == true) console.log(`Data`, data);
+  if (loading && signUpDevLogs == true) console.log(`Signup Loading`, loading);
+  if (error && signUpDevLogs == true) console.log(`Signup Error`, error);
+  if (data && signUpDevLogs == true) console.log(`Signup Data`, data);
   
   const updateFormState = (e) => {
     let { name, value } = e.target;
@@ -103,8 +103,8 @@ export default function SignUp() {
       }
     } catch (error) {
       console.log(`Error adding user`, error);
-      console.log(`GraphQL errors`, error.graphQLErrors);
-      console.log(`Network errors`, error.networkError);
+      console.log(`GraphQL errors on Sign Up`, error.graphQLErrors);
+      console.log(`Network errors on Sign Up`, error.networkError);
     }
   };
 
