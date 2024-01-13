@@ -5,6 +5,7 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import { Link, useNavigate } from 'react-router-dom';
 import Section from '../../components/section/Section';
+import { reformatDatesOnMongoDBObject } from '../../helper';
 
 export default function SignIn() {
     const navigate = useNavigate();
@@ -71,10 +72,10 @@ export default function SignIn() {
                 }
             })
 
-            let userToSignIn = {
+            let userToSignIn = reformatDatesOnMongoDBObject({
                 ...signInResponse.data.signIn.user,
                 token: signInResponse.data.signIn.token
-            }
+            });
 
             // Successfull Sign In
             setUser(userToSignIn);

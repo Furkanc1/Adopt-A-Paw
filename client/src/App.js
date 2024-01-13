@@ -8,7 +8,7 @@ import SignUp from './pages/sign-up/Sign-Up';
 import Profile from './pages/profile/Profile';
 import Contact from './pages/contact/Contact';
 import Portfolio from './pages/portfolio/Portfolio';
-import { projectsUsedAcrossApplication } from './helper';
+import { projectsUsedAcrossApplication, samplePetData } from './helper';
 import { createContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
@@ -24,21 +24,28 @@ export const inDevEnv = () => window && window.location.host.includes(`local`);
 
 // So that the images in the pet card client can be randomly selected
 export const placeholderPetImage = `https://www.worldanimalprotection.us/sites/default/files/styles/600x400/public/media/header_updated_0.png?h=55cb88a5&itok=hcHgpiWr`;
-export const publicPetImageURLs = [
-  `https://naturvet.com/cdn/shop/articles/shutterstock_1640876206.jpg?v=1691013127`,
-  `https://media.post.rvohealth.io/wp-content/uploads/2021/06/lizard-iguana-1200x628-facebook.jpg`,
-  `https://img.freepik.com/free-photo/cat-sneaking-look-from-white-screen_60438-3711.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1705017600&semt=sph`
-];
 
-export const getUsers = async () => {
+export const getUsersFromAPI = async () => {
   try {
-    let usersResponse = await fetch(`http://localhost:3001/api/users`);
+    let usersResponse = await fetch(`${inDevEnv() ? `http://localhost:3001` : `http://localhost:3001`}/api/users`);
     if (usersResponse.status === 200) {
       let usersData = await usersResponse.json();
       if (Array.isArray(usersData)) return usersData;
     }
   } catch (error) {
-    console.log(`Server Error`, error);
+    console.log(`Server Error on Get Users`, error);
+  }
+}
+
+export const getPetsFromAPI = async () => {
+  try {
+    let petsResponse = await fetch(`${inDevEnv() ? `http://localhost:3001` : `http://localhost:3001`}/api/pets`);
+    if (petsResponse.status === 200) {
+      let petsData = await petsResponse.json();
+      if (Array.isArray(petsData)) return petsData;
+    }
+  } catch (error) {
+    console.log(`Server Error on Get Pets`, error);
   }
 }
 
@@ -47,56 +54,13 @@ export default function App() {
   // let [projects, setProjects] = useState(getGithubData());
   let [user, setUser] = useState(null);
   // We already have a call for pets in the beginning of the app, we are just going to pass it down into profile component. (We have access to the pets because of previously putting the pet card in state)
-  let [pets, setPets] = useState([{
-    age: 5,
-    name: `Doggo`,
-    species: `Cat`,
-    adopted: false,
-    creatorId: `65a09f306c7fb01830dfb58d`,
-    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
-  }, {
-    age: 5,
-    name: `Doggo`,
-    species: `Cat`,
-    adopted: false,
-    creatorId: `65a09f306c7fb01830dfb58d`,
-    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
-  }, {
-    age: 5,
-    name: `Doggo`,
-    species: `Cat`,
-    adopted: false,
-    creatorId: `65a09f306c7fb01830dfb58d`,
-    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
-  }, {
-    age: 5,
-    name: `Doggo`,
-    species: `Cat`,
-    adopted: false,
-    creatorId: `65a09f306c7fb01830dfb58d`,
-    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
-  },{
-    age: 5,
-    name: `Doggo`,
-    species: `Cat`,
-    adopted: false,
-    creatorId: `65a09f306c7fb01830dfb58d`,
-    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
-  },{
-    age: 5,
-    name: `Doggo`,
-    species: `Cat`,
-    adopted: false,
-    creatorId: `65a09f306c7fb01830dfb58d`,
-    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
-  },{
-    age: 5,
-    name: `Doggo`,
-    species: `Cat`,
-    adopted: false,
-    creatorId: `65a09f306c7fb01830dfb58d`,
-    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
-  }]);
+  // Our code is being run linearlly
+  // pets and users is being created, and they are set, originally, as null
+  // Later on, we re-assign the values by calling the API routes in our useEffect, and if they are null (which they will be, because they are SET to it), we re-define it.
+  // The reason we had to do it this way is because of the linter, where in order to have a defined variable/function, you have to use/call it. (It'll say erorr: you defined the variable but are not using it.)
+  // It is also sometimes better, in react, to do our server/API calls from the useEffect, because useEffect is asyncrnous in nature, and we'll have a new thread opened up
+  // Inside of that new thread, we'll do our server calls, which again another asyncrounous call.
+  let [pets, setPets] = useState(null);
   let [users, setUsers] = useState(null);
   let [title, setTitle] = useState(appTitle);
   let [authors, setAuthors] = useState(appAuthors);
@@ -110,16 +74,6 @@ export default function App() {
     if (authorEmail === ``) setAuthorEmail(appEmail);
     if (projects.length === 0) setProjects(projectsUsedAcrossApplication);
 
-    const getUsersFromDatabase = async () => {
-      let usersFromDatabase = await getUsers();
-      if (usersFromDatabase) {
-        inDevEnv() && console.log(`Users`, usersFromDatabase);
-        setUsers(usersFromDatabase);
-      }
-    }
-
-    if (users === null) getUsersFromDatabase();
-
     if (user === null) {
       let storedUser = JSON.parse(localStorage.getItem(`user`));
       if (storedUser) {
@@ -128,7 +82,35 @@ export default function App() {
       }
     }
 
-  }, [user, users, projects, title, authors, authorEmail])
+    const serveUsersFromAPIToClient = async () => {
+      let usersFromAPI = await getUsersFromAPI();
+      if (usersFromAPI) {
+        setUsers(usersFromAPI);
+        // A safe else condition catch. In case there is a server error, we are setting users to an empty array.
+        // This is so that the application doesn't error out, and at least the array is given.
+        // This will allow all our other array maps for users/pets to continue functioning.
+      } else {
+        setUsers([]);
+      }
+    }
+    
+    const servePetsFromAPIToClient = async () => {
+      let petsFromAPI = await getPetsFromAPI();
+      if (petsFromAPI) {
+        setPets(petsFromAPI);
+      } else {
+        // Same concept as the serverUsersFromAPIToClient catch, but here we just bring in the dummy data so that something pops up
+        setPets(samplePetData);
+      }
+    }
+
+    if (users === null) serveUsersFromAPIToClient();
+    if (pets === null) servePetsFromAPIToClient();
+
+    if (users != null) inDevEnv() && console.log(`Users`, users);
+    if (pets != null) inDevEnv() && console.log(`Pets`, pets);
+
+  }, [user, users, pets, projects, title, authors, authorEmail])
   
   return (
     <StateContext.Provider value={{ user, users, setUser, setUsers, pets, setPets, title, logo, projects, authors, authorEmail, credentials, setCredentials }}>

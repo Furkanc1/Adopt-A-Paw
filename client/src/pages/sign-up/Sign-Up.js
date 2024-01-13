@@ -5,6 +5,7 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import { Link, useNavigate } from 'react-router-dom';
 import Section from '../../components/section/Section';
+import { reformatDatesOnMongoDBObject } from '../../helper';
 
 export const signUpDevLogs = false;
 
@@ -92,7 +93,7 @@ export default function SignUp() {
         });
   
         // Successfull Sign Up
-        let userSignedUp = data.addUser;
+        let userSignedUp = reformatDatesOnMongoDBObject(data.addUser);
         if (userSignedUp != null && userSignedUp != undefined) {
           inDevEnv() && console.log(`User Signed Up Successfully`, userSignedUp);
           setUsers(prevUsers => [...prevUsers, userSignedUp]);

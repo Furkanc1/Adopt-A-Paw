@@ -42,21 +42,21 @@ const server = new ApolloServer({
   }
 });
 
-const modifyUsers = (usersWeWantToModify) => {
-  let modifiedUsers = usersWeWantToModify.map((usr) => {
-    let createdAt = new Date(parseFloat(usr.createdAt)).toLocaleString();
-    let updatedAt = new Date(parseFloat(usr.updatedAt)).toLocaleString();
+const reformatDatesOnMongoDBObjects = (objectWeWantToReformatDates) => {
+  let refomrattedDateObjects = objectWeWantToReformatDates.map((obj) => {
+    let createdAt = new Date(parseFloat(obj.createdAt)).toLocaleString();
+    let updatedAt = new Date(parseFloat(obj.updatedAt)).toLocaleString();
 
-    delete usr.password;
+    if (obj.password) delete obj.password;
 
     return {
-      ...usr,
+      ...obj,
       createdAt,
       updatedAt
     }
   });
 
-  return modifiedUsers;
+  return refomrattedDateObjects;
 }
 
 const startApolloServer = async () => {
@@ -103,6 +103,8 @@ const startApolloServer = async () => {
   app.get('/api/all', async (req, res) => {
     try {
       const result = await server.executeOperation({
+        // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
+        // This way the front end is presented with clean non-bloated data.
         query: `query all {
           users {
             _id,
@@ -126,7 +128,17 @@ const startApolloServer = async () => {
         }, `
       });
 
-      res.json(result.body.singleResult.data);
+      let { users: usersFromDatabaseQuery, pets: petsFromDatabaseQuery } = result.body.singleResult.data;
+
+      let modifiedUsersFromDatabaseQuery = reformatDatesOnMongoDBObjects(usersFromDatabaseQuery);
+      let modifiedPetsFromDatabaseQuery = reformatDatesOnMongoDBObjects(petsFromDatabaseQuery);
+
+      let dataToServeToAPI = {
+        pets: modifiedPetsFromDatabaseQuery,
+        users: modifiedUsersFromDatabaseQuery
+      }
+
+      res.json(dataToServeToAPI);
     } catch (error) {
       res.status(500).send(`Error getting users`, error);
     }
@@ -149,7 +161,8 @@ const startApolloServer = async () => {
       // Altering the raw data from the database and re-formatting "modifying" it to make it more readable.
       // Transitioned it from a one time change to a function that can be called
       let usersFromDatabaseQuery = result.body.singleResult.data.users;
-      let modifiedUsersFromDatabaseQuery = modifyUsers(usersFromDatabaseQuery);
+      let modifiedUsersFromDatabaseQuery = reformatDatesOnMongoDBObjects(usersFromDatabaseQuery);
+      // Do your changes at the server level so that the changes can be served the same all across your app or even your api
       res.json(modifiedUsersFromDatabaseQuery);
     } catch (error) {
       res.status(500).send(`Error getting users`, error);
@@ -247,7 +260,10 @@ const startApolloServer = async () => {
         }`
       });
 
-      res.json(result.body.singleResult.data.pets);
+      let petsFromDatabaseQuery = result.body.singleResult.data.pets;
+      let modifiedPetsFromDatabaseQuery = reformatDatesOnMongoDBObjects(petsFromDatabaseQuery);
+
+      res.json(modifiedPetsFromDatabaseQuery);
     } catch (error) {
       res.status(500).send(`Error getting pets`, error);
     }

@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { StateContext, inDevEnv, placeholderPetImage } from "../../App";
+import { reformatDatesOnMongoDBObject } from "../../helper";
 
 export const petFormDevLogs = false;
 
@@ -59,7 +60,7 @@ export default function PetForm() {
             });
 
             // Successfull Add Pet
-            let petAdded = data.addPet;
+            let petAdded = reformatDatesOnMongoDBObject(data.addPet);
             if (petAdded != null && petAdded != undefined) {
               inDevEnv() && console.log(`Pet Added Successfully`, petAdded);
               setPets(prevPets => [...prevPets, petAdded]);

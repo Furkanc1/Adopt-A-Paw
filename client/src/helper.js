@@ -1,3 +1,76 @@
+export const reformatDatesOnMongoDBObject = (objectWeWantToReformatDate) => {
+    // We are grabbing the object, and accessing the specific date, whether its created or update date
+    // MongoDB isn't giving us updated logs. Sometimes MongoDB hasn't quite put in the timestamps on the object yet
+    // "if you have this property", then do everything after the ?. Else, do everything after the :.
+    let createdAt = objectWeWantToReformatDate.createdAt ? new Date(parseFloat(objectWeWantToReformatDate.createdAt)).toLocaleString() : new Date().toLocaleString();
+    let updatedAt = objectWeWantToReformatDate.updatedAt ? new Date(parseFloat(objectWeWantToReformatDate.updatedAt)).toLocaleString() : new Date().toLocaleString();
+  
+    if (objectWeWantToReformatDate.password) delete objectWeWantToReformatDate.password;
+
+    return {
+      ...objectWeWantToReformatDate,
+      createdAt,
+      updatedAt
+    }
+}
+
+export const publicPetImageURLs = [
+    `https://naturvet.com/cdn/shop/articles/shutterstock_1640876206.jpg?v=1691013127`,
+    `https://media.post.rvohealth.io/wp-content/uploads/2021/06/lizard-iguana-1200x628-facebook.jpg`,
+    `https://img.freepik.com/free-photo/cat-sneaking-look-from-white-screen_60438-3711.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1705017600&semt=sph`
+];
+
+export const samplePetData = [{
+    age: 5,
+    name: `Doggo`,
+    species: `Cat`,
+    adopted: false,
+    creatorId: `65a09f306c7fb01830dfb58d`,
+    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
+  }, {
+    age: 5,
+    name: `Doggo`,
+    species: `Cat`,
+    adopted: false,
+    creatorId: `65a09f306c7fb01830dfb58d`,
+    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
+  }, {
+    age: 5,
+    name: `Doggo`,
+    species: `Cat`,
+    adopted: false,
+    creatorId: `65a09f306c7fb01830dfb58d`,
+    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
+  }, {
+    age: 5,
+    name: `Doggo`,
+    species: `Cat`,
+    adopted: false,
+    creatorId: `65a09f306c7fb01830dfb58d`,
+    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
+  },{
+    age: 5,
+    name: `Doggo`,
+    species: `Cat`,
+    adopted: false,
+    creatorId: `65a09f306c7fb01830dfb58d`,
+    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
+  },{
+    age: 5,
+    name: `Doggo`,
+    species: `Cat`,
+    adopted: false,
+    creatorId: `65a09f306c7fb01830dfb58d`,
+    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
+  },{
+    age: 5,
+    name: `Doggo`,
+    species: `Cat`,
+    adopted: false,
+    creatorId: `65a09f306c7fb01830dfb58d`,
+    publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
+  }];
+
 export const vanillaJavaScriptValidation = (emailString) => {
     const validDomains = [`com`, `org`, `gov`, `edu`];
     let errorString = "Please enter a valid email!";
