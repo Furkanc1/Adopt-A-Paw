@@ -1,5 +1,7 @@
+
 import './App.css';
 import logo from './logo.svg';
+import io from 'socket.io-client';
 import Home from './pages/home/Home';
 import About from './pages/about/About';
 import Resume from './pages/resume/Resume';
@@ -13,6 +15,7 @@ import { createContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 export const appTitle = `Adopt-A-Paw`;
+const socket = io(`http://localhost:3001`);
 export const appEmail = `plutocoding@gmail.com`;
 export const appAuthors = `Alex, Fuf, & Isaiah`;
 export const StateContext = createContext({});
@@ -82,7 +85,7 @@ export default function App() {
       }
     }
 
-    const serveUsersFromAPIToClient = async () => {
+    const refreshUsersFromAPI = async () => {
       let usersFromAPI = await getUsersFromAPI();
       if (usersFromAPI) {
         setUsers(usersFromAPI);
@@ -94,7 +97,7 @@ export default function App() {
       }
     }
     
-    const servePetsFromAPIToClient = async () => {
+    const refreshPetsFromAPI = async () => {
       let petsFromAPI = await getPetsFromAPI();
       if (petsFromAPI) {
         setPets(petsFromAPI);
@@ -104,11 +107,28 @@ export default function App() {
       }
     }
 
-    if (users === null) serveUsersFromAPIToClient();
-    if (pets === null) servePetsFromAPIToClient();
+    // Run on initialization
+    if (users === null) refreshUsersFromAPI();
+    if (pets === null) refreshPetsFromAPI();
+
+    // Run on any database change
+    socket.on(`usersChanged`, (usersDatabaseChange) => {
+      refreshUsersFromAPI();
+      inDevEnv() && console.log(`Users Database Change Detected`, usersDatabaseChange);
+    })
+    
+    socket.on(`petsChanged`, (petsDatabaseChange) => {
+      refreshPetsFromAPI();
+      inDevEnv() && console.log(`Pets Database Change Detected`, petsDatabaseChange);
+    })
 
     if (users != null) inDevEnv() && console.log(`Users`, users);
     if (pets != null) inDevEnv() && console.log(`Pets`, pets);
+  // Turning off the change detector after the use effect runs, so we don't get 100 different logs
+    return () => {
+      socket.off(`usersChanged`);
+      socket.off(`petsChanged`);
+    }
 
   }, [user, users, pets, projects, title, authors, authorEmail])
   

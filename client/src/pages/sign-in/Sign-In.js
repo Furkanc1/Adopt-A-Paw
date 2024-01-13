@@ -36,7 +36,7 @@ export default function SignIn() {
     const updateFormState = (e) => {
         let { name, value } = e.target;
         // let usernames = users.map(usr => usr.username);
-        let userEmails = users.map(usr => usr.email.toLowerCase());
+        let userEmails = users ? users.map(usr => usr.email.toLowerCase()) : [];
         let userLogins = [...userEmails].sort((firstItem, nextItem) => firstItem.length - nextItem.length);
         let minLength = userLogins && Array.isArray(userLogins) && userLogins.length > 0 ? userLogins[0].length : 3;
 

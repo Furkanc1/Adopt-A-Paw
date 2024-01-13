@@ -1,12 +1,12 @@
 import { useState, useContext } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { StateContext, inDevEnv, placeholderPetImage } from "../../App";
+import { StateContext, placeholderPetImage } from "../../App";
 import { capitalizeAllWordsInString, reformatDatesOnMongoDBObject } from "../../helper";
 
 export const petFormDevLogs = false;
 
 export default function PetForm() {
-    let { user, setPets } = useContext(StateContext);
+    let { user } = useContext(StateContext);
     let [formData, setFormData] = useState({});
 
     const [addPetMutation, { loading, error, data }] = useMutation(gql`
@@ -16,6 +16,7 @@ export default function PetForm() {
                 name
                 power
                 species
+                ownerId
                 creatorId
                 publicImageURL
             }
@@ -60,8 +61,8 @@ export default function PetForm() {
             // Successfull Add Pet
             let petAdded = reformatDatesOnMongoDBObject(data.addPet);
             if (petAdded != null && petAdded != undefined) {
-              inDevEnv() && console.log(`Pet Added Successfully`, petAdded);
-              setPets(prevPets => [...prevPets, petAdded]);
+            //   inDevEnv() && console.log(`Pet Added Successfully`, petAdded);
+            //   setPets(prevPets => [...prevPets, petAdded]);
               e.target.reset();
             }
 

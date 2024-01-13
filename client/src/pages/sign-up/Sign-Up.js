@@ -1,6 +1,6 @@
+import { StateContext } from '../../App';
 import { useState, useContext } from 'react';
 import { useMutation, gql } from '@apollo/client';
-import { StateContext, inDevEnv } from '../../App';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ export const signUpDevLogs = false;
 
 export default function SignUp() {
   const navigate = useNavigate();
-  let { users, setUsers, setCredentials } = useContext(StateContext);
+  let { users, setCredentials } = useContext(StateContext);
   let [formData, setFormData] = useState({});
   let [signUpUsernameError, setSignUpUsernameError] = useState(``);
   let [signUpEmailError, setSignUpEmailError] = useState(``);
@@ -35,7 +35,7 @@ export default function SignUp() {
 
     if (name == `email`) {
       let validDomains = [`com`, `org`, `gov`, `edu`];
-      let userEmails = users.map(usr => usr.email.toLowerCase());
+      let userEmails = users ? users.map(usr => usr.email.toLowerCase()) : [];
       value = value.toLowerCase();
 
       if (value.length >= 7) {
@@ -59,7 +59,7 @@ export default function SignUp() {
         setSignUpEmailError(``);
       }
     } else if (name == `username`) {
-      let usernames = users.map(usr => usr.username);
+      let usernames = users ? users.map(usr => usr.username) : [];
 
       if (value.length >= 3) {
         if (usernames.includes(value)) {
@@ -95,8 +95,8 @@ export default function SignUp() {
         // Successfull Sign Up
         let userSignedUp = reformatDatesOnMongoDBObject(data.addUser);
         if (userSignedUp != null && userSignedUp != undefined) {
-          inDevEnv() && console.log(`User Signed Up Successfully`, userSignedUp);
-          setUsers(prevUsers => [...prevUsers, userSignedUp]);
+          // inDevEnv() && console.log(`User Signed Up Successfully`, userSignedUp);
+          // setUsers(prevUsers => [...prevUsers, userSignedUp]);
           setCredentials(userSignedUp);
           e.target.reset();
           navigate(`/sign-in`);

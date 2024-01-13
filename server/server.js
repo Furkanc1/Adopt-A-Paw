@@ -1,19 +1,36 @@
+require('dotenv').config();
 const path = require('path');
 const cors = require('cors');
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const fetch = require('cross-fetch');
+// const fetch = require('cross-fetch');
 const db = require('./config/connection');
 const typeDefs = require('./schemas/typeDefs');
 const resolvers = require('./schemas/resolvers');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
-const { ApolloClient, InMemoryCache, gql, HttpLink } = require('@apollo/client');
+// const { ApolloClient, InMemoryCache, gql, HttpLink } = require('@apollo/client');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: `http://localhost:3000`,
+    methods: [`GET`, `POST`, `UPDATE`, `PATCH`, `DELETE`],
+    credentials: true
+  }
+});
+
 let secret = `secret-key`;
 let token = null;
+
+// Global variables from DB open
+let usersDatabaseWatcher = null;
+let petsDatabaseWatcher = null;
 
 // Replace this whatever deployment service we use
 // export const liveLink = `http://adoptapet.com`;
@@ -269,12 +286,33 @@ const startApolloServer = async () => {
     }
   });
 
+  // At this point we will already have access to the DB because it is open, therewfore we can listen for the changes in the DB
+  // Once fully implemented we can remove our front-end simulations of the change
   db.once('open', () => {
-    app.listen(PORT, () => {
+    // Reference to our collection. Whenever there is achange to the users/pet collection, it will give us a signal
+    // Real time listeners
+    usersDatabaseWatcher = db.collection(`users`).watch();
+    petsDatabaseWatcher = db.collection(`pets`).watch();
+
+    usersDatabaseWatcher.on(`change`, (usersDatabaseChangeEvent) => {
+      io.emit(`usersChanged`, usersDatabaseChangeEvent);
+    })
+    
+    petsDatabaseWatcher.on(`change`, (petsDatabaseChangeEvent) => {
+      io.emit(`petsChanged`, petsDatabaseChangeEvent);
+    })
+
+    httpServer.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
       console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
     });
   });
 };
+
+process.on('SIGINT', () => {
+  petsDatabaseWatcher.close();
+  usersDatabaseWatcher.close();
+  process.exit(0);
+});
 
 startApolloServer();
