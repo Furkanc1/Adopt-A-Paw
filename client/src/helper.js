@@ -1,3 +1,9 @@
+export const capitalizeAllWordsInString = (string) => {
+    return string.replace(/\b\w/g, (match) => {
+        return match.toUpperCase();
+    });
+}
+
 export const reformatDatesOnMongoDBObject = (objectWeWantToReformatDate) => {
     // We are grabbing the object, and accessing the specific date, whether its created or update date
     // MongoDB isn't giving us updated logs. Sometimes MongoDB hasn't quite put in the timestamps on the object yet
@@ -21,49 +27,49 @@ export const publicPetImageURLs = [
 ];
 
 export const samplePetData = [{
-    age: 5,
+    power: 5,
     name: `Doggo`,
     species: `Cat`,
     adopted: false,
     creatorId: `65a09f306c7fb01830dfb58d`,
     publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
   }, {
-    age: 5,
+    power: 5,
     name: `Doggo`,
     species: `Cat`,
     adopted: false,
     creatorId: `65a09f306c7fb01830dfb58d`,
     publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
   }, {
-    age: 5,
+    power: 5,
     name: `Doggo`,
     species: `Cat`,
     adopted: false,
     creatorId: `65a09f306c7fb01830dfb58d`,
     publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
   }, {
-    age: 5,
+    power: 5,
     name: `Doggo`,
     species: `Cat`,
     adopted: false,
     creatorId: `65a09f306c7fb01830dfb58d`,
     publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
   },{
-    age: 5,
+    power: 5,
     name: `Doggo`,
     species: `Cat`,
     adopted: false,
     creatorId: `65a09f306c7fb01830dfb58d`,
     publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
   },{
-    age: 5,
+    power: 5,
     name: `Doggo`,
     species: `Cat`,
     adopted: false,
     creatorId: `65a09f306c7fb01830dfb58d`,
     publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
   },{
-    age: 5,
+    power: 5,
     name: `Doggo`,
     species: `Cat`,
     adopted: false,

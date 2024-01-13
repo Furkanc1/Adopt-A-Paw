@@ -17,7 +17,7 @@ const typeDefs = `
     _id: ID!
     name: String!
     species: String!
-    age: Int
+    power: Int
     adopted: Boolean
     publicImageURL: String
     ownerId: String
@@ -35,7 +35,7 @@ const typeDefs = `
   input NewPetInput {
     name: String!
     species: String!
-    age: Int
+    power: Int
     adopted: Boolean
     creatorId: String!
     publicImageURL: String

@@ -56,7 +56,7 @@ export default function Pet({pet}) {
             {pet.publicImageURL && <img src={pet.publicImageURL} className={`petPic petField`} alt={`Image of Pet`} />}
             <div className={`petDetails`}>
                 <div className={`petName petField`}>{pet.name}</div>
-                <div className={`petSpecies petField`}>{pet.species}, Age {pet.age && pet.age}</div>
+                <div className={`petSpecies petField`}>{pet.species}, Pwr {pet.power && pet.power}</div>
             </div>
             {/* Conditionally render the adopt button display dependin on if they are logged in or not. */}
             {/* In addition to not being signed in, when the click the button, re-direct to the sign in page. */}

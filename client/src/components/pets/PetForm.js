@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { StateContext, inDevEnv, placeholderPetImage } from "../../App";
-import { reformatDatesOnMongoDBObject } from "../../helper";
+import { capitalizeAllWordsInString, reformatDatesOnMongoDBObject } from "../../helper";
 
 export const petFormDevLogs = false;
 
@@ -13,8 +13,8 @@ export default function PetForm() {
         mutation AddPet($newPet: NewPetInput!) {
             addPet(newPet: $newPet) {
                 _id
-                age
                 name
+                power
                 species
                 adopted
                 creatorId
@@ -39,7 +39,7 @@ export default function PetForm() {
         e.preventDefault();
 
         try {
-            let { name, species, age, publicImageURL } = formData;
+            let { name, species, power, publicImageURL } = formData;
 
             if (publicImageURL == null || publicImageURL == undefined || publicImageURL == ``) publicImageURL = placeholderPetImage;
 
@@ -49,12 +49,12 @@ export default function PetForm() {
             const { data } = await addPetMutation({
                 variables: {
                   newPet: {
-                    name,
-                    species,
                     publicImageURL,
                     adopted: false,
                     creatorId: user._id,
-                    age: parseFloat(Math.floor(age))
+                    power: parseFloat(Math.floor(power)),
+                    name: capitalizeAllWordsInString(name),
+                    species: capitalizeAllWordsInString(species),
                   },
                 },
             });
@@ -78,7 +78,7 @@ export default function PetForm() {
         <form id={`addPetForm`} className={`alignCenter flex gap5 justifyCenter petForm`} onSubmit={(e) => onFormSubmit(e)} onChange={(e) => updateFormState(e)}>
             <input name={`name`} type={`text`} placeholder={`Enter Pet Name...`} required />
             <input name={`species`} type={`text`} placeholder={`Enter Pet Species...`} required />
-            <input name={`age`} className={`petAge`} type={`number`} step={1} max={120} min={0} style={{maxWidth: 65}} placeholder={`Age...`} required />
+            <input name={`power`} className={`petPwr`} type={`number`} step={1} max={99999} min={0} style={{maxWidth: 65}} placeholder={`Power...`} required />
             <input name={`publicImageURL`} className={`petImage`} type={`text`} placeholder={`Public Image URL...`} />
             <button className={`blackButton`} type={`submit`}>Add</button>
         </form>

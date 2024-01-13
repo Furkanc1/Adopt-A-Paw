@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema, model } = require('mongoose');
 
 const petSchema = new Schema({
-    age: { type: Number },
+    power: { type: Number },
     ownerId: { type: String },
     publicImageURL: { type: String },
     creatorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

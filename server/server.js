@@ -116,8 +116,8 @@ const startApolloServer = async () => {
           },
           pets {
             _id,
-            age,
             name,
+            power,
             species,
             adopted,
             creatorId,
@@ -170,77 +170,77 @@ const startApolloServer = async () => {
   });
 
   // Assuming server is the Apollo Server instance
-  const apolloServerUrl = 'http://localhost:3001/graphql'; // Replace with your Apollo Server endpoint
-  const client = new ApolloClient({
-    uri: apolloServerUrl,
-    cache: new InMemoryCache(),
-    link: new HttpLink({ 
-      fetch,
-      uri: '/graphql', 
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
-    }),
-  });
+  // const apolloServerUrl = 'http://localhost:3001/graphql'; // Replace with your Apollo Server endpoint
+  // const client = new ApolloClient({
+  //   uri: apolloServerUrl,
+  //   cache: new InMemoryCache(),
+  //   link: new HttpLink({ 
+  //     fetch,
+  //     uri: '/graphql', 
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     }
+  //   }),
+  // });
 
-  app.post('/api/users', async (req, res) => {
-    try {
-      const { data } = await client.query({
-        query: gql`
-          query {
-            users {
-              email
-              username,
-            }
-          }
-        `,
-      });
+  // app.post('/api/users', async (req, res) => {
+  //   try {
+  //     const { data } = await client.query({
+  //       query: gql`
+  //         query {
+  //           users {
+  //             email
+  //             username,
+  //           }
+  //         }
+  //       `,
+  //     });
 
-      const newUser = new User(req.body);
-      await newUser.validate();
+  //     const newUser = new User(req.body);
+  //     await newUser.validate();
 
-      const savedUser = await newUser.save();
+  //     const savedUser = await newUser.save();
   
-      res.status(200).json(savedUser);
-    } catch (error) {
-      if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
-        res.status(400).json({ error: 'Email already exists.' });
-      } else if (error.code === 11000 && error.keyPattern && error.keyPattern.username) {
-        res.status(400).json({ error: 'Username already exists.' });
-      } else {
-        res.status(500).send(`Error Adding User: ${error.message}`);
-      }
-      // res.status(500).send(`Error Adding User: ${error}`);
-    }
-  });
+  //     res.status(200).json(savedUser);
+  //   } catch (error) {
+  //     if (error.code === 11000 && error.keyPattern && error.keyPattern.email) {
+  //       res.status(400).json({ error: 'Email already exists.' });
+  //     } else if (error.code === 11000 && error.keyPattern && error.keyPattern.username) {
+  //       res.status(400).json({ error: 'Username already exists.' });
+  //     } else {
+  //       res.status(500).send(`Error Adding User: ${error.message}`);
+  //     }
+  //     // res.status(500).send(`Error Adding User: ${error}`);
+  //   }
+  // });
   
-  app.post('/api/pets', async (req, res) => {
-    try {
-      const { data } = await client.query({
-        query: gql`
-          query {
-            pets {
-              age,
-              name,
-              species,
-              adopted,
-              creatorId,
-              publicImageURL,
-            }
-          }
-        `,
-      });
+  // app.post('/api/pets', async (req, res) => {
+  //   try {
+  //     const { data } = await client.query({
+  //       query: gql`
+  //         query {
+  //           pets {
+  //             name,
+  //             power,
+  //             species,
+  //             adopted,
+  //             creatorId,
+  //             publicImageURL,
+  //           }
+  //         }
+  //       `,
+  //     });
 
-      const newPet = new Pet(req.body);
-      await newPet.validate();
+  //     const newPet = new Pet(req.body);
+  //     await newPet.validate();
 
-      const savedPet = await newPet.save();
+  //     const savedPet = await newPet.save();
   
-      res.status(200).json(savedPet);
-    } catch (error) {
-      res.status(500).send(`Error Adding Pet: ${error}`);
-    }
-  });
+  //     res.status(200).json(savedPet);
+  //   } catch (error) {
+  //     res.status(500).send(`Error Adding Pet: ${error}`);
+  //   }
+  // });
 
   app.get('/api/pets', async (req, res) => {
     try {
@@ -248,14 +248,14 @@ const startApolloServer = async () => {
         query: `query pets {
           pets {
             _id,
-            age,
             name,
+            power,
             species,
             adopted,
             creatorId,
-            publicImageURL,
             createdAt,
-            updatedAt
+            updatedAt,
+            publicImageURL,
           }
         }`
       });
