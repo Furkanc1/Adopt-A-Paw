@@ -16,7 +16,6 @@ export default function PetForm() {
                 name
                 power
                 species
-                adopted
                 creatorId
                 publicImageURL
             }
@@ -50,7 +49,6 @@ export default function PetForm() {
                 variables: {
                   newPet: {
                     publicImageURL,
-                    adopted: false,
                     creatorId: user._id,
                     power: parseFloat(Math.floor(power)),
                     name: capitalizeAllWordsInString(name),

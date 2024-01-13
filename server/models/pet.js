@@ -14,10 +14,6 @@ const petSchema = new Schema({
         type: String,
         required: true
     },
-    adopted: { 
-        type: Boolean, 
-        default: false
-    },
 }, {
     timestamps: true,
     toJSON: {

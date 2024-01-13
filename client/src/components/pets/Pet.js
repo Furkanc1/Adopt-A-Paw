@@ -8,7 +8,6 @@ export default function Pet({pet}) {
 
     const adoptPet = () => {
         // We are updating the pet here (based on the user pressing the enabled adopt button)
-        pet.adopted = true;
         pet.ownerId = user._id;
         pet.updatedAt = new Date().toLocaleString();
         
@@ -26,12 +25,12 @@ export default function Pet({pet}) {
             return updatedPetsAfterAdoption;
         });
 
-        console.log(`Adopt Me`, pet);
+        console.log(`Adopt Me Clientside`, pet);
     }
 
     const isAdoptionDisabled = () => {
         let disabled = false;
-        if (user == null || pet.adopted == true) {
+        if (user == null || pet.ownerId) {
           disabled = true;
         }
         return disabled;
@@ -41,7 +40,7 @@ export default function Pet({pet}) {
         let buttonText = `Adopt Me`;
         
         if (isAdoptionDisabled() == true) {
-            if (pet.adopted == true) {
+            if (pet.ownerId) {
                 buttonText = `Adopted`;
             } else {
                 buttonText = `Sign In to Adopt`;

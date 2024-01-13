@@ -18,12 +18,6 @@ const userSchema = new Schema(
       type: String,
       required: [true, `Please enter a password`],
     },
-    adoptedPets: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Pet",
-      },
-    ],
   },
   {
     timestamps: true,
@@ -49,9 +43,9 @@ userSchema.methods.isCorrectPassword = async function (password) {
 };
 
 // when we query a user, we'll also get another field called `bookCount` with the number of saved books we have
-userSchema.virtual("petCount").get(function () {
-  return this.adoptedPets.length;
-});
+// userSchema.virtual("petCount").get(function () {
+//   return this.adoptedPets.length;
+// });
 
 const User = model("User", userSchema);
 

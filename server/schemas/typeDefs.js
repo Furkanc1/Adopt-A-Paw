@@ -18,7 +18,6 @@ const typeDefs = `
     name: String!
     species: String!
     power: Int
-    adopted: Boolean
     publicImageURL: String
     ownerId: String
     creatorId: String!
@@ -36,7 +35,6 @@ const typeDefs = `
     name: String!
     species: String!
     power: Int
-    adopted: Boolean
     creatorId: String!
     publicImageURL: String
   }
