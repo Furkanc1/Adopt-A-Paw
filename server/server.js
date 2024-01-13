@@ -42,6 +42,23 @@ const server = new ApolloServer({
   }
 });
 
+const modifyUsers = (usersWeWantToModify) => {
+  let modifiedUsers = usersWeWantToModify.map((usr) => {
+    let createdAt = new Date(parseFloat(usr.createdAt)).toLocaleString();
+    let updatedAt = new Date(parseFloat(usr.updatedAt)).toLocaleString();
+
+    delete usr.password;
+
+    return {
+      ...usr,
+      createdAt,
+      updatedAt
+    }
+  });
+
+  return modifiedUsers;
+}
+
 const startApolloServer = async () => {
   await server.start();
   
@@ -129,8 +146,11 @@ const startApolloServer = async () => {
           }
         }`
       });
-
-      res.json(result.body.singleResult.data.users);
+      // Altering the raw data from the database and re-formatting "modifying" it to make it more readable.
+      // Transitioned it from a one time change to a function that can be called
+      let usersFromDatabaseQuery = result.body.singleResult.data.users;
+      let modifiedUsersFromDatabaseQuery = modifyUsers(usersFromDatabaseQuery);
+      res.json(modifiedUsersFromDatabaseQuery);
     } catch (error) {
       res.status(500).send(`Error getting users`, error);
     }
