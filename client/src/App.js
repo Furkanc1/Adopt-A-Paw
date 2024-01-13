@@ -23,7 +23,9 @@ console.log(`Welcome to Adopt A Paw`);
 export const inDevEnv = () => window && window.location.host.includes(`local`);
 
 // So that the images in the pet card client can be randomly selected
+export const placeholderPetImage = `https://www.worldanimalprotection.us/sites/default/files/styles/600x400/public/media/header_updated_0.png?h=55cb88a5&itok=hcHgpiWr`;
 export const publicPetImageURLs = [
+  placeholderPetImage,
   `https://naturvet.com/cdn/shop/articles/shutterstock_1640876206.jpg?v=1691013127`,
   `https://media.post.rvohealth.io/wp-content/uploads/2021/06/lizard-iguana-1200x628-facebook.jpg`,
   `https://img.freepik.com/free-photo/cat-sneaking-look-from-white-screen_60438-3711.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1705017600&semt=sph`

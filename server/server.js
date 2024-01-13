@@ -101,8 +101,10 @@ const startApolloServer = async () => {
             name,
             species,
             adopted,
+            creatorId,
             createdAt,
             updatedAt
+            publicImageURL,
           }
         }, `
       });
@@ -190,6 +192,7 @@ const startApolloServer = async () => {
               species,
               adopted,
               creatorId,
+              publicImageURL,
             }
           }
         `,
@@ -217,6 +220,7 @@ const startApolloServer = async () => {
             species,
             adopted,
             creatorId,
+            publicImageURL,
             createdAt,
             updatedAt
           }

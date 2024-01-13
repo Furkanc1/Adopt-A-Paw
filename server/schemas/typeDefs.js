@@ -38,6 +38,7 @@ const typeDefs = `
     age: Int
     adopted: Boolean
     creatorId: String!
+    publicImageURL: String
   }
 
   type Mutation {

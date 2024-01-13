@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { StateContext, inDevEnv } from "../../App";
+import { StateContext, inDevEnv, placeholderPetImage } from "../../App";
 
 export const petFormDevLogs = false;
 
@@ -17,6 +17,7 @@ export default function PetForm() {
                 species
                 adopted
                 creatorId
+                publicImageURL
             }
         }
     `);
@@ -37,7 +38,9 @@ export default function PetForm() {
         e.preventDefault();
 
         try {
-            let { name, species, age } = formData;
+            let { name, species, age, publicImageURL } = formData;
+
+            if (publicImageURL == null || publicImageURL == undefined || publicImageURL == ``) publicImageURL = placeholderPetImage;
 
             // This mutation is for adding a pet into the database, it returns an object called data that contains a property called addPet.
             // That addPet property contains the pet we just stored in the database
@@ -47,6 +50,7 @@ export default function PetForm() {
                   newPet: {
                     name,
                     species,
+                    publicImageURL,
                     adopted: false,
                     creatorId: user._id,
                     age: parseFloat(Math.floor(age))
@@ -74,6 +78,7 @@ export default function PetForm() {
             <input name={`name`} type={`text`} placeholder={`Enter Pet Name...`} required />
             <input name={`species`} type={`text`} placeholder={`Enter Pet Species...`} required />
             <input name={`age`} className={`petAge`} type={`number`} step={1} max={120} min={0} style={{maxWidth: 65}} placeholder={`Age...`} required />
+            <input name={`publicImageURL`} className={`petImage`} type={`text`} placeholder={`Public Image URL...`} />
             <button className={`blackButton`} type={`submit`}>Add</button>
         </form>
     )
