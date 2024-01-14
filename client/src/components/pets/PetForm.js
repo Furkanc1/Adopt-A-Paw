@@ -9,7 +9,7 @@ export default function PetForm() {
     let { user } = useContext(StateContext);
     let [formData, setFormData] = useState({});
 
-    const [addPetMutation, { loading, error, data }] = useMutation(gql`
+    const [addPetMutation, { loading: addPetLoading, error: addPetError, data: addPetData }] = useMutation(gql`
         mutation AddPet($newPet: NewPetInput!) {
             addPet(newPet: $newPet) {
                 _id
@@ -22,10 +22,12 @@ export default function PetForm() {
             }
         }
     `);
-
-    if (loading && petFormDevLogs == true) console.log(`Pet Form Loading`, loading);
-    if (error && petFormDevLogs == true) console.log(`Pet Form Error`, error);
-    if (data && petFormDevLogs == true) console.log(`Pet Form Data`, data);
+    
+    // These if conditions are also just to satisfy the linter
+    if (addPetLoading && petFormDevLogs == true) console.log(`Pet Form addPetLoading`, addPetLoading);
+    if (addPetError) console.log(`Pet Form addPetError`, addPetError);
+    // The line below however can run
+    if (addPetData && petFormDevLogs == true) console.log(`Pet Form addPetData`, addPetData);
 
     const updateFormState = (e) => {
         let { name, value } = e.target;

@@ -43,6 +43,33 @@ const resolvers = {
         throw new Error(`Error Adding Pet: ${error.message}`);
       }
     },
+    updatePet: async (_, { petId, update }) => {
+      try {
+        let updateQuery = { ...update };
+
+        // If ownerId is null, remove it from the document
+        if (!update.ownerId || update.ownerId === null || update.ownerId === undefined || update.ownerId === `No Owner`) {
+          updateQuery = { ...updateQuery, $unset: { ownerId: `` } };
+          delete updateQuery.ownerId;
+        }
+
+        const updatedPet = await Pet.findByIdAndUpdate(petId, updateQuery, { new: true });
+        return updatedPet;
+      } catch (error) {
+        throw new Error(`Error Updating Pet: ${error.message}`);
+      }
+    },
+    deletePet: async (_, { petId }) => {
+      try {
+        const deletedPet = await Pet.findByIdAndDelete(petId);
+        if (!deletedPet) {
+          return { success: false, message: `Pet not found`, deletedPetId: null };
+        }
+        return { success: true, message: `Pet deleted successfully`, deletedPetId: petId };
+      } catch (error) {
+        throw new Error(`Error Deleting Pet: ${error.message}`);
+      }
+    }
   },
   Query: {
     users: async () => {

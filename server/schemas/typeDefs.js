@@ -6,23 +6,24 @@ const typeDefs = `
 
   type User {
     _id: ID!
-    username: String!
     email: String!
+    username: String!
     password: String!
     createdAt: String
     updatedAt: String
   }
 
-  type Pet {
-    _id: ID!
-    name: String!
-    species: String!
-    power: Int
-    publicImageURL: String
-    ownerId: String
-    creatorId: String!
-    createdAt: String
-    updatedAt: String
+  type Mutation {
+    addUser(newUser: NewUserInput): User
+  }
+  
+  type Mutation {
+    signIn(email: String!, password: String!): AuthPayload
+  }
+
+  type AuthPayload {
+    token: String
+    user: User
   }
 
   input NewUserInput {
@@ -31,16 +32,25 @@ const typeDefs = `
     password: String!
   }
 
-  input NewPetInput {
-    name: String!
-    species: String!
+  type Pet {
+    _id: ID!
     power: Int
+    name: String!
+    ownerId: String
+    species: String!
     creatorId: String!
+    createdAt: String
+    updatedAt: String
     publicImageURL: String
   }
 
-  type Mutation {
-    addUser(newUser: NewUserInput): User
+  input NewPetInput {
+    power: Int
+    name: String!
+    ownerId: String
+    species: String!
+    creatorId: String!
+    publicImageURL: String
   }
  
   type Mutation {
@@ -48,12 +58,25 @@ const typeDefs = `
   }
 
   type Mutation {
-    signIn(email: String!, password: String!): AuthPayload
+    updatePet(petId: ID!, update: UpdatePetInput): Pet
   }
 
-  type AuthPayload {
-    token: String
-    user: User
+  input UpdatePetInput {
+    power: Int
+    name: String
+    species: String
+    ownerId: String
+    publicImageURL: String
+  }
+
+  type Mutation {
+    deletePet(petId: ID!): DeletePetResponse
+  }
+  
+  type DeletePetResponse {
+    success: Boolean!
+    message: String
+    deletedPetId: ID
   }
 `;
 
