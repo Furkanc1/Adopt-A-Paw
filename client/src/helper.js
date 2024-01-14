@@ -21,10 +21,25 @@ export const reformatDatesOnMongoDBObject = (objectWeWantToReformatDate) => {
 }
 
 export const publicPetImageURLs = [
+    `https://artincontext.org/wp-content/uploads/2023/01/dragon-coloring-pages.jpg`,
     `https://naturvet.com/cdn/shop/articles/shutterstock_1640876206.jpg?v=1691013127`,
+    `https://t4.ftcdn.net/jpg/05/70/60/83/360_F_570608311_Jx0ATjcWWDw1hKfkkNBfjUQ1tPKRFRgT.jpg`,
     `https://media.post.rvohealth.io/wp-content/uploads/2021/06/lizard-iguana-1200x628-facebook.jpg`,
+    `https://img.freepik.com/free-photo/dragons-fantasy-artificial-intelligence-image_23-2150400884.jpg`,
     `https://img.freepik.com/free-photo/cat-sneaking-look-from-white-screen_60438-3711.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1705017600&semt=sph`
 ];
+
+// export const publicPetImageURLs = [
+//     {
+//         name: `Dragon`
+//         url: `https://artincontext.org/wp-content/uploads/2023/01/dragon-coloring-pages.jpg`
+//     },
+//     `https://naturvet.com/cdn/shop/articles/shutterstock_1640876206.jpg?v=1691013127`,
+//     `https://t4.ftcdn.net/jpg/05/70/60/83/360_F_570608311_Jx0ATjcWWDw1hKfkkNBfjUQ1tPKRFRgT.jpg`,
+//     `https://media.post.rvohealth.io/wp-content/uploads/2021/06/lizard-iguana-1200x628-facebook.jpg`,
+//     `https://img.freepik.com/free-photo/dragons-fantasy-artificial-intelligence-image_23-2150400884.jpg`,
+//     `https://img.freepik.com/free-photo/cat-sneaking-look-from-white-screen_60438-3711.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1705017600&semt=sph`
+// ];
 
 export const samplePetData = [{
     power: 5,

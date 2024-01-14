@@ -8,7 +8,8 @@ export const petCardDevLogs = false;
 
 export default function Pet({pet}) {
     const navigate = useNavigate();
-    let { user } = useContext(StateContext);
+    // let [button, setButton] = useState({});
+    let { user, petToEdit, setPetToEdit } = useContext(StateContext);
 
     const [updatePetMutation, { data: updatePetData, loading: updatePetLoading, error: updatePetError }] = useMutation(gql`
         mutation UpdatePet($petId: ID!, $update: UpdatePetInput!) {
@@ -98,16 +99,57 @@ export default function Pet({pet}) {
         return disabled;
     }
 
+    const cancelEditPet = () => {
+        setPetToEdit(null);
+        let petFormElement = document.querySelector(`.petForm`);
+        petFormElement.reset();
+    }
+
+    // const determineCardButton = () => {
+    //     let petHasOwner = pet.ownerId;
+    //     let userIsSignedOut = user == null;
+    //     let userOwnsPet = user && user._id == pet.ownerId;
+    //     let petIsBeingEdited = petToEdit != null && petToEdit._id == pet._id;
+
+    // We could do all this with one object in state, but instead we have it broken up into two different functions
+
+    //     setButton({
+    //         text: userIsSignedOut ? `Sign In to Adopt` : `Adopt Me`,
+    //         function: () => userIsSignedOut ? navigate(`/sign-in`) : adoptPet()
+    //     })
+
+    //     let buttonText = userIsSignedOut ? `Sign In to Adopt` : `Adopt Me`;
+        
+    //     if (petHasOwner) {
+    //         if (userOwnsPet) {
+    //             if (petIsBeingEdited) {
+    //                 buttonText = `Cancel`;
+    //             } else {
+    //                 buttonText = `Edit`;
+    //             }
+    //         } else {
+    //             buttonText = `Adopted`;
+    //         }
+    //     }
+
+    //     return buttonText;
+    // }
+
     const determineCardButtonText = () => {
         let petHasOwner = pet.ownerId;
         let userIsSignedOut = user == null;
         let userOwnsPet = user && user._id == pet.ownerId;
+        let petIsBeingEdited = petToEdit != null && petToEdit._id == pet._id;
 
         let buttonText = userIsSignedOut ? `Sign In to Adopt` : `Adopt Me`;
         
         if (petHasOwner) {
             if (userOwnsPet) {
-                buttonText = `Edit`;
+                if (petIsBeingEdited) {
+                    buttonText = `Cancel`;
+                } else {
+                    buttonText = `Edit`;
+                }
             } else {
                 buttonText = `Adopted`;
             }
@@ -116,20 +158,21 @@ export default function Pet({pet}) {
         return buttonText;
     }
 
-    const editPet = () => {
-        console.log(`Edit this Pet`, pet);
-    }
-
     const determineCardButtonFunction = () => {
         let petHasOwner = pet.ownerId;
         let userIsSignedOut = user == null;
         let userOwnsPet = user && user._id == pet.ownerId;
+        let petIsBeingEdited = petToEdit != null && petToEdit._id == pet._id;
 
         let buttonFunction = () => userIsSignedOut ? navigate(`/sign-in`) : adoptPet();
 
         if (petHasOwner) {
             if (userOwnsPet) {
-                buttonFunction = () => editPet();
+                if (petIsBeingEdited) {
+                    buttonFunction = () => cancelEditPet();
+                } else {
+                    buttonFunction = () => setPetToEdit(pet);
+                }
             } else {
                 buttonFunction = () => null;
             }
@@ -139,21 +182,22 @@ export default function Pet({pet}) {
     }
 
     return (
-        <div className={`pet flexColumn card alignCenter flex justifyCenter ${user && pet.ownerId == user._id ? `owned` : ``}`}>
-            <Suspense fallback={<LazyLoadImage effect={`blur`} src={placeholderPetImage} className={`petPic petField`} alt={`Image of Pet`} width={`auto`} height={`auto`} />}>
-                {pet.publicImageURL && <LazyLoadImage effect={`blur`} src={pet.publicImageURL} className={`petPic petField`} alt={`Image of Pet`} width={`auto`} height={`auto`} />}
+        <div className={`pet flexColumn card alignCenter flex justifyCenter ${user && pet.ownerId == user._id ? `owned` : ``} ${user && pet.ownerId == user._id && petToEdit && petToEdit != null && petToEdit._id == pet._id ? `editing` : ``}`} title={determineCardButtonText() == `Adopted` ? `Owned by ${pet.owner.username}` : ``}>
+            <Suspense fallback={<LazyLoadImage effect="blur" src={placeholderPetImage} className={`petPic petField`} alt={`Image of Pet`} width={`auto`} height={`auto`} />}>
+                {pet.publicImageURL && <LazyLoadImage effect="blur" src={pet.publicImageURL} className={`petPic petField`} alt={`Image of Pet`} width={`auto`} height={`auto`} />}
             </Suspense>
             <div className={`petDetails`}>
                 <div className={`petName petField`}>{pet.name}</div>
                 <div className={`petSpecies petSubField petField`}><strong><i>Species: {pet.species}</i></strong></div>
-                <div className={`petSpecies petSubField petField`}><strong><i>Power: {pet.power && pet.power}</i></strong></div>
+                <div className={`petPower petSubField petField`}><strong><i>Power: {pet.power && pet.power}</i></strong></div>
+                {/* {inDevEnv() && <div className={`petUpdated petSubField petField`}><strong><i className={`flex flexColumn`}><span style={{textDecoration: `underline`}}>Updated</span> <span>{pet.updatedAt && pet.updatedAt}</span></i></strong></div>} */}
             </div>
             {/* Conditionally render the adopt button display dependin on if they are logged in or not. */}
             {/* In addition to not being signed in, when the click the button, re-direct to the sign in page. */}
             {/* Try to re-purpose something instead of deleting and wasting it.*/}
             <div className={`petCardButtons flex gap5 justifySpaceBetween`}>
-                <button disabled={isAdoptionDisabled()} className={`adoptPetButton blackButton ${isAdoptionDisabled() == true ? `disabled` : ``}`} onClick={() => determineCardButtonFunction()}>{determineCardButtonText()}</button>
-                {user && user != null && user._id == pet.ownerId && <button title={`Delete Pet`} onClick={() => deletePet()} className={`deletePetButton blackButton`}>Delete</button>}
+                <button title={determineCardButtonText() == `Adopted` ? `Owned by ${pet.owner.username}` : determineCardButtonText()} disabled={isAdoptionDisabled()} className={`adoptPetButton blackButton ${isAdoptionDisabled() == true ? `disabled` : ``}`} onClick={() => determineCardButtonFunction()}>{determineCardButtonText()}</button>
+                {user && user != null && user._id == pet.ownerId && <button title={`Delete Pet`} onClick={() => deletePet()} className={`adoptPetButton blackButton`}>Delete</button>}
             </div>
         </div>
     )
