@@ -25,7 +25,7 @@ const io = new Server(httpServer, {
   }
 });
 
-let secret = `secret-key`;
+let secret = process.env.SECRET;
 let token = null;
 
 // Global variables from DB open
@@ -67,13 +67,9 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req }) => {
-
     token = req.headers.authorization || req.cookies.jwtToken;
-    console.log(`Token`, token);
-
     try {
       let userAuth = jwt.verify(token, secret);
-      console.log(`User Authenticated`, userAuth);
       return { user: userAuth };
     } catch (error) {
       return { user: null };
@@ -93,33 +89,38 @@ const reformatDatesOnMongoDBObjects = (objectWeWantToReformatDates) => {
     return {
       ...obj,
       createdAt,
-      updatedAt
+      updatedAt,
+      rawDataFromDatabse: obj,
     }
   });
 
   return refomrattedDateObjects;
 }
 
-const cleanAllRelationalDataForAPI = (usersToModify, petsToModify) => {
-  let modifiedPetsFromDatabaseQuery = reformatDatesOnMongoDBObjects(petsToModify).map(pt => {
-    pt.creator = usersToModify.find(usr => usr._id == pt.creatorId);
-    if (pt.ownerId) {
+const modifyDataFromDatabaseIntoCleanerArrays = (usersFromDatabase, petsFromDatabase) => {
+  // This is all virtual data that doesn't affect our DB
+  // We grab the Data from the DB, alter it, then serve it to the front end from the api
+  // We refer to the API across the app instead of directly referring to the DB
+
+  let modifiedPetsFromDatabase = reformatDatesOnMongoDBObjects(petsFromDatabase).map(petWithReformattedDates => {
+    petWithReformattedDates.creator = usersFromDatabase.find(usr => usr._id == petWithReformattedDates.creatorId);
+    if (petWithReformattedDates.ownerId) {
       return {
-        ...pt,
-        owner: usersToModify.find(usr => usr._id == pt.ownerId),
+        ...petWithReformattedDates,
+        owner: usersFromDatabase.find(usr => usr._id == petWithReformattedDates.ownerId),
       }
-    } else return pt;
+    } else return petWithReformattedDates;
   });
 
-  let modifiedUsersFromDatabaseQuery = reformatDatesOnMongoDBObjects(usersToModify).map(usr => ({
+  let modifiedUsersFromDatabase = reformatDatesOnMongoDBObjects(usersFromDatabase).map(usr => ({
     ...usr,
-    petsAdopted: modifiedPetsFromDatabaseQuery.filter(pt => pt.ownerId == usr._id),
-    petsCreated: modifiedPetsFromDatabaseQuery.filter(pt => pt.creatorId == usr._id),
+    petsAdopted: modifiedPetsFromDatabase.filter(pt => pt.ownerId == usr._id),
+    petsCreated: modifiedPetsFromDatabase.filter(pt => pt.creatorId == usr._id),
   }));
 
   let cleanedUpDataToServeToAPI = {
-    pets: modifiedPetsFromDatabaseQuery,
-    users: modifiedUsersFromDatabaseQuery
+    pets: modifiedPetsFromDatabase,
+    users: modifiedUsersFromDatabase
   }
 
   return cleanedUpDataToServeToAPI;
@@ -145,7 +146,63 @@ const startApolloServer = async () => {
   app.get('/', (req, res) => {
     res.send(`Adopt-A-Pet Server`);
   });
+
+  // Using Apollo GraphQL
+  app.get('/api/all', async (req, res) => {
+    try {
+      const result = await server.executeOperation({
+        // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
+        // This way the front end is presented with clean non-bloated data.
+        query: allQuery
+      });
+
+      let { users: usersFromDatabase, pets: petsFromDatabase } = result.body.singleResult.data;
+
+      let dataToServeToAPI = modifyDataFromDatabaseIntoCleanerArrays(usersFromDatabase, petsFromDatabase);
+
+      res.json(dataToServeToAPI);
+    } catch (error) {
+      res.status(500).send(`Error getting users`, error);
+    }
+  });
   
+  app.get('/api/users', async (req, res) => {
+    try {
+      const result = await server.executeOperation({
+        // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
+        // This way the front end is presented with clean non-bloated data.
+        query: allQuery
+      });
+
+      let { users: usersFromDatabaseQuery, pets: petsFromDatabaseQuery } = result.body.singleResult.data;
+
+      let dataToServeToAPI = modifyDataFromDatabaseIntoCleanerArrays(usersFromDatabaseQuery, petsFromDatabaseQuery);
+
+      res.json(dataToServeToAPI.users);
+    } catch (error) {
+      res.status(500).send(`Error getting users`, error);
+    }
+  });
+
+  app.get('/api/pets', async (req, res) => {
+    try {
+      const result = await server.executeOperation({
+        // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
+        // This way the front end is presented with clean non-bloated data.
+        query: allQuery
+      });
+
+      let { users: usersFromDatabaseQuery, pets: petsFromDatabaseQuery } = result.body.singleResult.data;
+
+      let dataToServeToAPI = modifyDataFromDatabaseIntoCleanerArrays(usersFromDatabaseQuery, petsFromDatabaseQuery);
+
+      res.json(dataToServeToAPI.pets);
+    } catch (error) {
+      res.status(500).send(`Error getting pets`, error);
+    }
+  });
+
+  // If we were not using mutations, we would use the below code
   // Using Mongo / Mongoose
   // app.get('/users', async (req, res) => {
   //   try {
@@ -164,43 +221,6 @@ const startApolloServer = async () => {
   //     res.status(500).send(`Error getting pets`, error);
   //   }
   // });
-
-  // Using Apollo GraphQL
-  app.get('/api/all', async (req, res) => {
-    try {
-      const result = await server.executeOperation({
-        // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
-        // This way the front end is presented with clean non-bloated data.
-        query: allQuery
-      });
-
-      let { users: usersFromDatabaseQuery, pets: petsFromDatabaseQuery } = result.body.singleResult.data;
-
-      let dataToServeToAPI = cleanAllRelationalDataForAPI(usersFromDatabaseQuery, petsFromDatabaseQuery);
-
-      res.json(dataToServeToAPI);
-    } catch (error) {
-      res.status(500).send(`Error getting users`, error);
-    }
-  });
-  
-  app.get('/api/users', async (req, res) => {
-    try {
-      const result = await server.executeOperation({
-        // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
-        // This way the front end is presented with clean non-bloated data.
-        query: allQuery
-      });
-
-      let { users: usersFromDatabaseQuery, pets: petsFromDatabaseQuery } = result.body.singleResult.data;
-
-      let dataToServeToAPI = cleanAllRelationalDataForAPI(usersFromDatabaseQuery, petsFromDatabaseQuery);
-
-      res.json(dataToServeToAPI.users);
-    } catch (error) {
-      res.status(500).send(`Error getting users`, error);
-    }
-  });
 
   // Assuming server is the Apollo Server instance
   // const apolloServerUrl = 'http://localhost:3001/graphql'; // Replace with your Apollo Server endpoint
@@ -274,24 +294,6 @@ const startApolloServer = async () => {
   //     res.status(500).send(`Error Adding Pet: ${error}`);
   //   }
   // });
-
-  app.get('/api/pets', async (req, res) => {
-    try {
-      const result = await server.executeOperation({
-        // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
-        // This way the front end is presented with clean non-bloated data.
-        query: allQuery
-      });
-
-      let { users: usersFromDatabaseQuery, pets: petsFromDatabaseQuery } = result.body.singleResult.data;
-
-      let dataToServeToAPI = cleanAllRelationalDataForAPI(usersFromDatabaseQuery, petsFromDatabaseQuery);
-
-      res.json(dataToServeToAPI.pets);
-    } catch (error) {
-      res.status(500).send(`Error getting pets`, error);
-    }
-  });
 
   // At this point we will already have access to the DB because it is open, therewfore we can listen for the changes in the DB
   // Once fully implemented we can remove our front-end simulations of the change

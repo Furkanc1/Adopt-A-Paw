@@ -2,9 +2,11 @@
   --bg: #282c34;
   --main: #21DDF7;
   --error: #970a0a;
+  --success: #26ae26;
   --petCardSize: 145px;
   --bgLight: #586a8e;
   --mainSoft: #c6f8ff;
+  --editGreen: #98ffc6;
   --secondary: #d515d5;
   --cardShadow: 0 0 4px 0px rgba(0, 0, 0, 0.25);
   --plutoBG: linear-gradient(transparent, transparent, transparent, transparent, transparent, transparent, transparent, white), url(/public/pluto_background.png);
@@ -80,8 +82,37 @@ a:hover {
   justify-content: center;
 }
 
+.justifyStart {
+  justify-content: flex-start;
+}
+
+.justifyEnd {
+  justify-content: flex-end;
+}
+
 .justifySpaceBetween {
   justify-content: space-between;
+}
+
+.characterCounts {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.characterCount {
+  transition: 150ms ease-in-out;
+}
+
+.characterCount.max {
+  min-width: 75px;
+}
+
+.valid {
+  color: var(--success);
+}
+
+.inavlid {
+  color: var(--error);
 }
 
 .w100 {
@@ -174,14 +205,22 @@ section {
   background: var(--mainSoft);
 }
 
-.petForm {
+.pet.editing {
+  background: var(--editGreen);
+}
+
+.petForm, .contactForm {
   padding: 0 15px 15px;
 }
 
-.petForm input {
+.petForm input, .contactForm input, .contactForm textarea {
   border-radius: 4px;
   border: 2px solid black;
   padding: 5px 0 5px 10px;
+}
+
+.contactForm {
+  width: 45%;
 }
 
 .petForm .petName {

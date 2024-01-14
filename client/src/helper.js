@@ -85,21 +85,23 @@ export const samplePetData = [{
     publicImageURL: publicPetImageURLs[Math.floor(Math.random()*publicPetImageURLs.length)],
   }];
 
-export const vanillaJavaScriptValidation = (emailString) => {
+  export const vanillaJavaScriptValidation = (emailString) => {
     const validDomains = [`com`, `org`, `gov`, `edu`];
-    let errorString = "Please enter a valid email!";
+    let errorString = `Please enter a valid email!`;
     // includes returns true/false
-    let emailHasAtSymbol = emailString.includes(`@`);
-    if (emailHasAtSymbol === true) {
-        // split returns an array
-        let emailWebsite = emailString.split(`@`)[1];
-        let emailDomain = emailWebsite.split(`.`)[1];
-        let emailHasValidDomain = validDomains.includes(emailDomain);
-        // all of these have to be true for the email to be valid
-        return emailString !== `` && emailHasValidDomain === true ? true : errorString;
-    } else {
-        errorString = `Email Addresses Need to have the @ Symbol`;
-        return errorString;
+    if (emailString != null && emailString != undefined && emailString != ``) {
+        let emailHasAtSymbol = emailString.includes(`@`);
+        if (emailHasAtSymbol === true) {
+            // split returns an array
+            let emailWebsite = emailString.split(`@`)[1];
+            let emailDomain = emailWebsite.split(`.`)[1];
+            let emailHasValidDomain = validDomains.includes(emailDomain);
+            // all of these have to be true for the email to be valid
+            return emailString !== `` && emailHasValidDomain === true ? true : errorString;
+        } else {
+            errorString = `Email Addresses Need to have the @ Symbol`;
+            return errorString;
+        }
     }
 };
 
