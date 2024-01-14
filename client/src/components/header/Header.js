@@ -3,7 +3,7 @@ import { StateContext } from '../../App';
 import { useContext, useEffect, useState } from 'react';
 
 export default function Header() {
-    let { title, authors, user, setUser } = useContext(StateContext); // State Context runs whenever the component that creates the context runs
+    let { title, authors, user, setUser, screenWidth, mobileBreakPoint, setScreenWidth, setScreenHeight } = useContext(StateContext); // State Context runs whenever the component that creates the context runs
     let [pageName, setPageName] = useState(window.location.pathname); // Local state will run anytime the component its inside of loads or unloads
 
     const signOut = () => {
@@ -19,13 +19,27 @@ export default function Header() {
         }
     }, [pageName])
 
+    useEffect(() => {
+        const handleResize = () => {
+            setScreenWidth(window.innerWidth);
+            setScreenHeight(window.innerHeight);
+            // console.log(`Screen Size Change Detected`, {
+            //     width: window.innerWidth,
+            //     height: window.innerHeight
+            // })
+        };
+
+        window.addEventListener(`resize`, handleResize);
+        return () => window.removeEventListener(`resize`, handleResize);
+    })
+
     return (
         <header className={`header flex alignCenter justifySpaceBetween`}>
             <div className={`column headerColumn columnLeft flex alignCenter gap5`}>
                 {/* You can still use class/id names inside the link tag because the React Link tag automatically includes an a tag. */}
                 <Link className={`flex alignCenter gap5 mainColorLink`} to={`/`}>
                     <h1>{ title }</h1>
-                    <span style={{color: `white`}}>- by {authors}</span>
+                    {screenWidth > mobileBreakPoint && <span style={{color: `white`}}>- by {authors}</span>}
                 </Link>
             </div>
             <div className={`column headerColumn columnRight`}>
@@ -34,18 +48,18 @@ export default function Header() {
                         {/* The a href tags won't work with a deployed version. React router DOM reccomends using their custom link component which will wrap the a tags in the link component. */}
                         {/* Newer versions of React Router DOM dont need an <a> tag inside the <Link> anymore */}
                         {user == null && <>
-                            <li>
+                            {screenWidth > mobileBreakPoint && <li>
                                 <Link to={`/about`}>About Me</Link>
-                            </li>
-                            <li>
+                            </li>}
+                            {screenWidth > mobileBreakPoint && <li>
                                 <Link to={`/portfolio`}>Portfolio</Link>
-                            </li>
-                            <li>
+                            </li>}
+                            {screenWidth > mobileBreakPoint && <li>
                                 <Link to={`/resume`}>Resume</Link>
-                            </li>
+                            </li>}
                         </>}
                         {user != null && <>
-                            Welcome, {user.username}
+                            {screenWidth > mobileBreakPoint && `Welcome,`} {user.username}
                             <li>
                                 <Link className={`${pageName === `/profile` ? `activePage` : `` }`} to={`/profile`}>Profile</Link>
                             </li>

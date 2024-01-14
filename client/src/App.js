@@ -10,8 +10,8 @@ import SignUp from './pages/sign-up/Sign-Up';
 import Profile from './pages/profile/Profile';
 import Contact from './pages/contact/Contact';
 import Portfolio from './pages/portfolio/Portfolio';
-import { projectsUsedAcrossApplication, samplePetData } from './helper';
 import { createContext, useEffect, useState } from 'react';
+import { projectsUsedAcrossApplication, samplePetData } from './helper';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 export const appTitle = `Adopt-A-Paw`;
@@ -66,9 +66,14 @@ export default function App() {
   let [pets, setPets] = useState(null);
   let [users, setUsers] = useState(null);
   let [title, setTitle] = useState(appTitle);
+  let [petToEdit, setPetToEdit] = useState(null);
   let [authors, setAuthors] = useState(appAuthors);
   let [credentials, setCredentials] = useState(null);
   let [authorEmail, setAuthorEmail] = useState(appEmail);
+  // For mobile responsiveness, this is our basic variable for the mobile breakpoint
+  let [mobileBreakPoint, setMobileBreakPoint] = useState(820);
+  let [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  let [screenHeight, setScreenHeight] = useState(window.innerHeight);
   let [projects, setProjects] = useState(projectsUsedAcrossApplication);
 
   useEffect(() => {
@@ -133,7 +138,7 @@ export default function App() {
   }, [user, users, pets, projects, title, authors, authorEmail])
   
   return (
-    <StateContext.Provider value={{ user, users, setUser, setUsers, pets, setPets, title, logo, projects, authors, authorEmail, credentials, setCredentials }}>
+    <StateContext.Provider value={{ user, users, setUser, setUsers, pets, setPets, petToEdit, setPetToEdit, title, logo, projects, authors, authorEmail, credentials, setCredentials, screenWidth, setScreenWidth, screenHeight, setScreenHeight, mobileBreakPoint, setMobileBreakPoint }}>
       <div className="App">
         <Router>
           <Routes>
