@@ -5,7 +5,7 @@ import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import { Link, useNavigate } from 'react-router-dom';
 import Section from '../../components/section/Section';
-import { reformatDatesOnMongoDBObject } from '../../helper';
+import { capitalizeAllWordsInString, reformatDatesOnMongoDBObject } from '../../helper';
 
 export const signUpDevLogs = false;
 
@@ -87,7 +87,7 @@ export default function SignUp() {
             newUser: {
               email,
               password,
-              username,
+              username: capitalizeAllWordsInString(username),
             },
           },
         });

@@ -4,8 +4,17 @@ import { useContext } from "react";
 import { StateContext } from "../../App";
 import { Link } from "react-router-dom";
 
-export default function Pets({showForm}) {
-    let { pets, user } = useContext(StateContext);
+export default function Pets({pets, showForm}) {
+    // Here we are destructuring, which is just another way of grabbing our object and the specific keys within it
+    let { user } = useContext(StateContext);
+    // let { showForm } = props;
+
+    // Here is another way of getting the same variables from the object.
+    // let showForm = props.showForm;
+    // let state = useContext(StateContext);
+    // let pets = state.pets;
+    // let users = state.users;
+
     return (
         // Conditionally rendering the pets display if the array contains valid pets
         <div className={`petsDiv`} style={{width: `100%`}}>

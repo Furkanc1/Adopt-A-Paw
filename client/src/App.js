@@ -113,12 +113,12 @@ export default function App() {
 
     // Run on any database change
     socket.on(`usersChanged`, (usersDatabaseChange) => {
-      refreshUsersFromAPI();
+      refreshUsersFromAPI(); // Synonymous with setting users in state
       inDevEnv() && console.log(`Users Database Change Detected`, usersDatabaseChange);
     })
     
     socket.on(`petsChanged`, (petsDatabaseChange) => {
-      refreshPetsFromAPI();
+      refreshPetsFromAPI(); // Synonymous with setting pets in state
       inDevEnv() && console.log(`Pets Database Change Detected`, petsDatabaseChange);
     })
 
