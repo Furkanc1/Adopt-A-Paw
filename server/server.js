@@ -32,6 +32,28 @@ let token = null;
 let usersDatabaseWatcher = null;
 let petsDatabaseWatcher = null;
 
+const allQuery = `query all {
+  users {
+    _id,
+    email,
+    username,
+    password,
+    createdAt,
+    updatedAt
+  },
+  pets {
+    _id,
+    power,
+    name,
+    species,
+    ownerId,
+    creatorId,
+    createdAt,
+    updatedAt
+    publicImageURL,
+  }
+}, `;
+
 // Replace this whatever deployment service we use
 // export const liveLink = `http://adoptapet.com`;
 // export const origin = process.env.NODE_ENV === 'production' ? liveLink : `http://localhost:3000`;
@@ -59,6 +81,8 @@ const server = new ApolloServer({
   }
 });
 
+// This is where we clean up the data and reform at it
+// This is so that the API can have this cleaner data, which will be used by the front end. (through the api call)
 const reformatDatesOnMongoDBObjects = (objectWeWantToReformatDates) => {
   let refomrattedDateObjects = objectWeWantToReformatDates.map((obj) => {
     let createdAt = new Date(parseFloat(obj.createdAt)).toLocaleString();
@@ -74,6 +98,31 @@ const reformatDatesOnMongoDBObjects = (objectWeWantToReformatDates) => {
   });
 
   return refomrattedDateObjects;
+}
+
+const cleanAllRelationalDataForAPI = (usersToModify, petsToModify) => {
+  let modifiedPetsFromDatabaseQuery = reformatDatesOnMongoDBObjects(petsToModify).map(pt => {
+    pt.creator = usersToModify.find(usr => usr._id == pt.creatorId);
+    if (pt.ownerId) {
+      return {
+        ...pt,
+        owner: usersToModify.find(usr => usr._id == pt.ownerId),
+      }
+    } else return pt;
+  });
+
+  let modifiedUsersFromDatabaseQuery = reformatDatesOnMongoDBObjects(usersToModify).map(usr => ({
+    ...usr,
+    petsAdopted: modifiedPetsFromDatabaseQuery.filter(pt => pt.ownerId == usr._id),
+    petsCreated: modifiedPetsFromDatabaseQuery.filter(pt => pt.creatorId == usr._id),
+  }));
+
+  let cleanedUpDataToServeToAPI = {
+    pets: modifiedPetsFromDatabaseQuery,
+    users: modifiedUsersFromDatabaseQuery
+  }
+
+  return cleanedUpDataToServeToAPI;
 }
 
 const startApolloServer = async () => {
@@ -122,38 +171,12 @@ const startApolloServer = async () => {
       const result = await server.executeOperation({
         // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
         // This way the front end is presented with clean non-bloated data.
-        query: `query all {
-          users {
-            _id,
-            email,
-            username,
-            password,
-            createdAt,
-            updatedAt
-          },
-          pets {
-            _id,
-            name,
-            power,
-            species,
-            ownerId,
-            creatorId,
-            createdAt,
-            updatedAt
-            publicImageURL,
-          }
-        }, `
+        query: allQuery
       });
 
       let { users: usersFromDatabaseQuery, pets: petsFromDatabaseQuery } = result.body.singleResult.data;
 
-      let modifiedUsersFromDatabaseQuery = reformatDatesOnMongoDBObjects(usersFromDatabaseQuery);
-      let modifiedPetsFromDatabaseQuery = reformatDatesOnMongoDBObjects(petsFromDatabaseQuery);
-
-      let dataToServeToAPI = {
-        pets: modifiedPetsFromDatabaseQuery,
-        users: modifiedUsersFromDatabaseQuery
-      }
+      let dataToServeToAPI = cleanAllRelationalDataForAPI(usersFromDatabaseQuery, petsFromDatabaseQuery);
 
       res.json(dataToServeToAPI);
     } catch (error) {
@@ -164,23 +187,16 @@ const startApolloServer = async () => {
   app.get('/api/users', async (req, res) => {
     try {
       const result = await server.executeOperation({
-        query: `query users {
-          users {
-            _id,
-            email,
-            username,
-            password,
-            createdAt,
-            updatedAt
-          }
-        }`
+        // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
+        // This way the front end is presented with clean non-bloated data.
+        query: allQuery
       });
-      // Altering the raw data from the database and re-formatting "modifying" it to make it more readable.
-      // Transitioned it from a one time change to a function that can be called
-      let usersFromDatabaseQuery = result.body.singleResult.data.users;
-      let modifiedUsersFromDatabaseQuery = reformatDatesOnMongoDBObjects(usersFromDatabaseQuery);
-      // Do your changes at the server level so that the changes can be served the same all across your app or even your api
-      res.json(modifiedUsersFromDatabaseQuery);
+
+      let { users: usersFromDatabaseQuery, pets: petsFromDatabaseQuery } = result.body.singleResult.data;
+
+      let dataToServeToAPI = cleanAllRelationalDataForAPI(usersFromDatabaseQuery, petsFromDatabaseQuery);
+
+      res.json(dataToServeToAPI.users);
     } catch (error) {
       res.status(500).send(`Error getting users`, error);
     }
@@ -262,25 +278,16 @@ const startApolloServer = async () => {
   app.get('/api/pets', async (req, res) => {
     try {
       const result = await server.executeOperation({
-        query: `query pets {
-          pets {
-            _id,
-            name,
-            power,
-            species,
-            ownerId,
-            creatorId,
-            createdAt,
-            updatedAt,
-            publicImageURL,
-          }
-        }`
+        // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
+        // This way the front end is presented with clean non-bloated data.
+        query: allQuery
       });
 
-      let petsFromDatabaseQuery = result.body.singleResult.data.pets;
-      let modifiedPetsFromDatabaseQuery = reformatDatesOnMongoDBObjects(petsFromDatabaseQuery);
+      let { users: usersFromDatabaseQuery, pets: petsFromDatabaseQuery } = result.body.singleResult.data;
 
-      res.json(modifiedPetsFromDatabaseQuery);
+      let dataToServeToAPI = cleanAllRelationalDataForAPI(usersFromDatabaseQuery, petsFromDatabaseQuery);
+
+      res.json(dataToServeToAPI.pets);
     } catch (error) {
       res.status(500).send(`Error getting pets`, error);
     }
