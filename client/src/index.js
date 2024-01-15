@@ -10,10 +10,8 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 const container = document.getElementById('root');
 const root = createRoot(container);
 
-const clientURL = window && window.location.host.includes(`local`) ? `http://localhost:3001` : `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
-
 const client = new ApolloClient({
-  uri: `${clientURL}/graphql`, // Adjust the URI based on your server setup
+  uri:  window && window.location.host.includes(`local`) ? `http://localhost:3001/graphql` : `/graphql`, // Adjust the URI based on your server setup
   cache: new InMemoryCache(),
 });
 
