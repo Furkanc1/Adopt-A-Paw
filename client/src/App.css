@@ -178,7 +178,11 @@ section {
 }
 
 .mainPageBio {
+  box-shadow: 2px 5px 20px;
+  border: 1px;
   width: 75%;
+  border-style: solid;
+  padding: 12px;
 }
 
 .mobilePets .pet {

@@ -14,23 +14,25 @@ import { createContext, useEffect, useState } from 'react';
 import { projectsUsedAcrossApplication, samplePetData } from './helper';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
+// This is to help us know what environment we are in. Are we in the local developer environment, or the deployed production environment?
+export const inDevEnv = () => window && window.location.host.includes(`local`);
+
 export const appTitle = `Adopt-A-Paw`;
-const socket = io(`http://localhost:3001`);
+let liveLinkMain = inDevEnv() ? `http://localhost:3001` : `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
+const socket = io(liveLinkMain);
 export const appEmail = `plutocoding@gmail.com`;
 export const appAuthors = `Alex, Fuf, & Isaiah`;
 export const StateContext = createContext({});
 
 console.log(`Welcome to Adopt A Paw`);
 
-// This is to help us know what environment we are in. Are we in the local developer environment, or the deployed production environment?
-export const inDevEnv = () => window && window.location.host.includes(`local`);
-
 // So that the images in the pet card client can be randomly selected
 export const placeholderPetImage = `https://www.worldanimalprotection.us/sites/default/files/styles/600x400/public/media/header_updated_0.png?h=55cb88a5&itok=hcHgpiWr`;
 
 export const getUsersFromAPI = async () => {
   try {
-    let usersResponse = await fetch(`${inDevEnv() ? `http://localhost:3001` : `http://localhost:3001`}/api/users`);
+    let liveLink = inDevEnv() ? `http://localhost:3001` : `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
+    let usersResponse = await fetch(`${liveLink}/api/users`);
     if (usersResponse.status === 200) {
       let usersData = await usersResponse.json();
       if (Array.isArray(usersData)) return usersData;
@@ -42,7 +44,8 @@ export const getUsersFromAPI = async () => {
 
 export const getPetsFromAPI = async () => {
   try {
-    let petsResponse = await fetch(`${inDevEnv() ? `http://localhost:3001` : `http://localhost:3001`}/api/pets`);
+    let liveLink = inDevEnv() ? `http://localhost:3001` : `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
+    let petsResponse = await fetch(`${liveLink}/api/pets`);
     if (petsResponse.status === 200) {
       let petsData = await petsResponse.json();
       if (Array.isArray(petsData)) return petsData;

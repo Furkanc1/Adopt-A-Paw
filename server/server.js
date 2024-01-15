@@ -14,12 +14,16 @@ const { expressMiddleware } = require('@apollo/server/express4');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+// Replace this whatever deployment service we use
+const liveLink = `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
+const origin = process.env.NODE_ENV === 'production' ? liveLink : `http://localhost:3000`;
+
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: `http://localhost:3000`,
+    origin: origin,
     methods: [`GET`, `POST`, `UPDATE`, `PATCH`, `DELETE`],
     credentials: true
   }
@@ -54,12 +58,8 @@ const allQuery = `query all {
   }
 }, `;
 
-// Replace this whatever deployment service we use
-// export const liveLink = `http://adoptapet.com`;
-// export const origin = process.env.NODE_ENV === 'production' ? liveLink : `http://localhost:3000`;
-
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: origin,
   credentials: true, // If you need to include cookies or authorization headers
 }));
 

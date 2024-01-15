@@ -1,5 +1,7 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+const liveLink = window && window.location.host.includes(`local`) ? 'http://localhost:3001' : 'https://adoptapaw-1-2c5b986974f2.herokuapp.com';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,7 +11,7 @@ export default defineConfig({
     open: true,
     proxy: {
       '/graphql': {
-        target: 'http://localhost:3001',
+        target: liveLink,
         changeOrigin: true,
         secure: false,
       }
