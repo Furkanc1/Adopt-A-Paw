@@ -1,11 +1,8 @@
 // import { StateContext } from '../../App';
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 import Header from '../../components/header/Header';
 import Footer from '../../components/footer/Footer';
 import Section from '../../components/section/Section';
-
-export const defaultBioLine1 = `I'm 25 and I'm a beginner full stack web developer!`;
-export const defaultBioLine2 = `I'm going through the Colombia University web dev bootcamp program with my brother!`;
 
 // For using react hooks outside of a react component
 // export const useReactOutsideOfReactComponent = (reactHooksToUse) => {
@@ -14,15 +11,15 @@ export const defaultBioLine2 = `I'm going through the Colombia University web de
 
 export default function About() {
     // let { logo } = useContext(StateContext);
-    let [bioLine1, setBioLine1] = useState(defaultBioLine1);
-    let [bioLine2, setBioLine2] = useState(defaultBioLine2);
+    // let [bioLine1, setBioLine1] = useState(defaultBioLine1);
+    // let [bioLine2, setBioLine2] = useState(defaultBioLine2);
 
-    useEffect(() => {
-        // We are trying to satisfy the linter here, by having no unused variables
-        // So we will create impossible if conditions just so we can use these variables and the linter stops complaining
-        if (bioLine1 == ``) setBioLine1(defaultBioLine1);
-        if (bioLine2 == ``) setBioLine2(defaultBioLine2);
-    }, [bioLine1, bioLine2])
+    // useEffect(() => {
+    //     // We are trying to satisfy the linter here, by having no unused variables
+    //     // So we will create impossible if conditions just so we can use these variables and the linter stops complaining
+    //     if (bioLine1 == ``) setBioLine1(defaultBioLine1);
+    //     if (bioLine2 == ``) setBioLine2(defaultBioLine2);
+    // }, [bioLine1, bioLine2])
 
     return (
         <>
@@ -30,12 +27,11 @@ export default function About() {
             <main>
                 <Section title={`About Me`} />
                 <section id={`aboutMe`} className={`aboutMeContentSection flex alignCenter justifyCenter flexColumn`} style={{padding: 15}}>
-                    <h2>About Me</h2>
-                    <p>
-                       Hey! My name is Alex, aka PlutoCoding!
-                       {bioLine1}
-                       {bioLine2} I love video-games, animals (Especially cats), music, movies, tv-shows, playing football, and being with family! I hope to have a succesful and fulfilling career as a programmer where I can bring my ideas to life!
-                    </p>
+                    <h2>Adopt-A-Paw:</h2>
+                    <p className='mainPageBio'>
+                    At Adopt-a-Paw, we believe in the transformative power of love and companionship. Our mission is to unite furry friends with loving families, creating lifelong bonds and endless joy. As an online adoption platform, Adopt-a-Paw strives to make the adoption process seamless and heartwarming.        
+                    
+                    Adopt-a-Paw is more than a platform; its a movement. Join us in making a difference in the lives of these wonderful creatures. Together, lets create countless tales of happiness, wagging tails, and purring hearts. Welcome to Adopt-a-Paw, where every adoption is a celebration of love and second chances. 🐾❤️            </p>
                 </section>
             </main>
             <Footer />

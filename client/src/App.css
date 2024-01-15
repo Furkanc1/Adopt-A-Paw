@@ -177,6 +177,10 @@ section {
   transition: 150ms ease-in-out;
 }
 
+.mainPageBio {
+  width: 75%;
+}
+
 .mobilePets .pet {
   width: var(--petCardSize);
   min-width: var(--petCardSize);

@@ -48,15 +48,15 @@ export default function Header() {
                         {/* The a href tags won't work with a deployed version. React router DOM reccomends using their custom link component which will wrap the a tags in the link component. */}
                         {/* Newer versions of React Router DOM dont need an <a> tag inside the <Link> anymore */}
                         {user == null && <>
-                            {screenWidth > mobileBreakPoint && <li>
+                            {/* {screenWidth > mobileBreakPoint && <li>
                                 <Link to={`/about`}>About Me</Link>
-                            </li>}
-                            {screenWidth > mobileBreakPoint && <li>
+                            </li>} */}
+                            {/* {screenWidth > mobileBreakPoint && <li>
                                 <Link to={`/portfolio`}>Portfolio</Link>
                             </li>}
                             {screenWidth > mobileBreakPoint && <li>
                                 <Link to={`/resume`}>Resume</Link>
-                            </li>}
+                            </li>} */}
                         </>}
                         {user != null && <>
                             {screenWidth > mobileBreakPoint && `Welcome,`} {user.username}
@@ -64,6 +64,9 @@ export default function Header() {
                                 <Link className={`${pageName === `/profile` ? `activePage` : `` }`} to={`/profile`}>Profile</Link>
                             </li>
                         </>}
+                        <li>
+                            <Link to={`/about`}>About Us</Link>
+                        </li>
                         <li>
                             <Link className={`${pageName === `/contact` ? `activePage` : `` }`} to={`/contact`}>Contact</Link>
                         </li>

@@ -23,6 +23,7 @@
     "concurrently": "^8.2.2"
   },
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "jsonwebtoken": "^9.0.2"
   }
 }

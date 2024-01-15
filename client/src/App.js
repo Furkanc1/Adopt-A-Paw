@@ -4,12 +4,12 @@ import logo from './logo.svg';
 import io from 'socket.io-client';
 import Home from './pages/home/Home';
 import About from './pages/about/About';
-import Resume from './pages/resume/Resume';
+// import Resume from './pages/resume/Resume';
 import SignIn from './pages/sign-in/Sign-In';
 import SignUp from './pages/sign-up/Sign-Up';
 import Profile from './pages/profile/Profile';
 import Contact from './pages/contact/Contact';
-import Portfolio from './pages/portfolio/Portfolio';
+// import Portfolio from './pages/portfolio/Portfolio';
 import { createContext, useEffect, useState } from 'react';
 import { projectsUsedAcrossApplication, samplePetData } from './helper';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
@@ -152,9 +152,9 @@ export default function App() {
             <Route path={`/aboutUs`} element={<About />} />
 
             <Route path={`/profile`} element={user != null ? <Profile /> : <Navigate to={`/`} />} />
-            <Route path={`/portfolio`} element={<Portfolio />} />
+            {/* <Route path={`/portfolio`} element={<Portfolio />} /> */}
             
-            <Route path={`/resume`} element={<Resume />} />
+            {/* <Route path={`/resume`} element={<Resume />} /> */}
             
             <Route path={`/contact`} element={<Contact />} />
             <Route path={`/contactus`} element={<Contact />} />
