@@ -18,7 +18,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 export const inDevEnv = () => window && window.location.host.includes(`local`);
 
 export const appTitle = `Adopt-A-Paw`;
-let liveLinkMain = inDevEnv() ? `http://localhost:3001` : `https://adoptapaw-1-2c5b986974f2.herokuapp.com/`;
+let herokuDeploymentURL = `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
+let serverPort = process.env.SERVERPORT || 5000;
+let liveLinkMain = inDevEnv() ? `http://localhost:${serverPort}` : herokuDeploymentURL;
 const socket = io(liveLinkMain);
 export const appEmail = `plutocoding@gmail.com`;
 export const appAuthors = `Alex, Fuf, & Isaiah`;
@@ -31,7 +33,8 @@ export const placeholderPetImage = `https://www.worldanimalprotection.us/sites/d
 
 export const getUsersFromAPI = async () => {
   try {
-    let liveLink = inDevEnv() ? `http://localhost:3001` : ``;
+    let serverPort = process.env.SERVERPORT || 5000;
+    let liveLink = inDevEnv() ? `http://localhost:${serverPort}` : herokuDeploymentURL;
     let usersResponse = await fetch(`${liveLink}/api/users`);
     if (usersResponse.status === 200) {
       let usersData = await usersResponse.json();
@@ -44,7 +47,8 @@ export const getUsersFromAPI = async () => {
 
 export const getPetsFromAPI = async () => {
   try {
-    let liveLink = inDevEnv() ? `http://localhost:3001` : ``;
+    let serverPort = process.env.SERVERPORT || 5000;
+    let liveLink = inDevEnv() ? `http://localhost:${serverPort}` : herokuDeploymentURL;
     let petsResponse = await fetch(`${liveLink}/api/pets`);
     if (petsResponse.status === 200) {
       let petsData = await petsResponse.json();

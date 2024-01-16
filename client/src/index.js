@@ -9,9 +9,10 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
+let serverPort = process.env.SERVERPORT || 5000;
 
 const client = new ApolloClient({
-  uri: window && window.location.host.includes(`local`) ? `http://localhost:3001/graphql` : `/graphql`, // Adjust the URI based on your server setup
+  uri: window && window.location.host.includes(`local`) ? `http://localhost:${serverPort}/graphql` : `/graphql`, // Adjust the URI based on your server setup
   cache: new InMemoryCache(),
 });
 

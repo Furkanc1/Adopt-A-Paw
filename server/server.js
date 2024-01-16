@@ -11,12 +11,11 @@ const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 // const { ApolloClient, InMemoryCache, gql, HttpLink } = require('@apollo/client');
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 const app = express();
 
 // Replace this whatever deployment service we use
-const liveLink = `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
-const origin = process.env.NODE_ENV === 'production' ? liveLink : `http://localhost:3000`;
+const origin = process.env.NODE_ENV === 'production' ? '*' : `http://localhost:3000`;
 
 const { createServer } = require("http");
 const { Server } = require("socket.io");
@@ -138,13 +137,17 @@ const startApolloServer = async () => {
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '../client/build')));
 
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, '../client/build/index.html'));
-    });
+    // app.get('*', (req, res) => {
+    //   res.sendFile(path.join(__dirname, '../client/build/index.html'));
+    // });
   } 
 
-  app.get(`/`, (req, res) => {
-    res.send(`Adopt-A-Pet Server`);
+  // app.get(`/`, (req, res) => {
+  //   res.send(`Adopt-A-Pet Server`);
+  // });
+ 
+  app.get(`/api`, (req, res) => {
+    res.send(`Adopt-A-Pet API`);
   });
 
   // Using Apollo GraphQL
@@ -223,7 +226,7 @@ const startApolloServer = async () => {
   // });
 
   // Assuming server is the Apollo Server instance
-  // const apolloServerUrl = 'http://localhost:3001/graphql'; // Replace with your Apollo Server endpoint
+  // const apolloServerUrl = 'http://localhost:${PORT}/graphql'; // Replace with your Apollo Server endpoint
   // const client = new ApolloClient({
   //   uri: apolloServerUrl,
   //   cache: new InMemoryCache(),
