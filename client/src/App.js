@@ -18,7 +18,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 export const inDevEnv = () => window && window.location.host.includes(`local`);
 
 export const appTitle = `Adopt-A-Paw`;
-let liveLinkMain = inDevEnv() ? `http://localhost:3001` : ``;
+let liveLinkMain = inDevEnv() ? `http://localhost:3001` : `https://adoptapaw-1-2c5b986974f2.herokuapp.com/`;
 const socket = io(liveLinkMain);
 export const appEmail = `plutocoding@gmail.com`;
 export const appAuthors = `Alex, Fuf, & Isaiah`;
