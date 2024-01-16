@@ -14,6 +14,7 @@ import { createContext, useEffect, useState } from 'react';
 import { projectsUsedAcrossApplication, samplePetData } from './helper';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
+// Stable Local Official
 // This is to help us know what environment we are in. Are we in the local developer environment, or the deployed production environment?
 export const inDevEnv = () => window && window.location.host.includes(`local`);
 
