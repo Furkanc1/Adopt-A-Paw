@@ -25,7 +25,7 @@ export default function About() {
         <>
             <Header />
             <main>
-                <Section title={`About Me`} />
+                <Section title={`About Us`} />
                 <section id={`aboutMe`} className={`aboutMeContentSection flex alignCenter justifyCenter flexColumn`} style={{padding: 15}}>
                     <h2>Adopt-A-Paw:</h2>
                     <p className='mainPageBio'>

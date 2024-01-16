@@ -22,8 +22,8 @@ let herokuDeploymentURL = `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
 let serverPort = process.env.SERVERPORT || 5000;
 let liveLinkMain = inDevEnv() ? `http://localhost:${serverPort}` : herokuDeploymentURL;
 const socket = io(liveLinkMain);
-export const appEmail = `plutocoding@gmail.com`;
-export const appAuthors = `Alex, Fuf, & Isaiah`;
+export const appEmail = `plutocoding@gmail.com, Furkdurk7@aol.com, Ikapr@gmail.com`;
+export const appAuthors = `Alex, Furk, & Isaiah`;
 export const StateContext = createContext({});
 
 console.log(`Welcome to Adopt A Paw`);
