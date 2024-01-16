@@ -18,8 +18,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 export const inDevEnv = () => window && window.location.host.includes(`local`);
 
 export const appTitle = `Adopt-A-Paw`;
-let liveLinkMain = inDevEnv() ? `http://localhost:3001` : ``;
-const socket = io(liveLinkMain);
+const socket = io(`http://localhost:3001`);
 export const appEmail = `plutocoding@gmail.com`;
 export const appAuthors = `Alex, Fuf, & Isaiah`;
 export const StateContext = createContext({});
