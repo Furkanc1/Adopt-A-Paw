@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 
 // Replace this whatever deployment service we use
-const liveLink = `http://adoptapaw-1-2c5b986974f2.herokuapp.com`;
+const liveLink = `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
 const origin = process.env.NODE_ENV === 'production' ? liveLink : `http://localhost:3000`;
 
 const { createServer } = require("http");

@@ -11,7 +11,7 @@ const container = document.getElementById('root');
 const root = createRoot(container);
 
 const client = new ApolloClient({
-  uri:  window && window.location.host.includes(`local`) ? `http://localhost:3001/graphql` : `/graphql`, // Adjust the URI based on your server setup
+  uri:  `/graphql`, // Adjust the URI based on your server setup
   cache: new InMemoryCache(),
 });
 
