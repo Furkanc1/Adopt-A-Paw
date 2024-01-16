@@ -143,12 +143,12 @@ const startApolloServer = async () => {
     });
   } 
 
-  app.get('/', (req, res) => {
+  app.get(`${liveLink}/api`, (req, res) => {
     res.send(`Adopt-A-Pet Server`);
   });
 
   // Using Apollo GraphQL
-  app.get('/api/all', async (req, res) => {
+  app.get(`${liveLink}/api/all`, async (req, res) => {
     try {
       const result = await server.executeOperation({
         // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
@@ -166,7 +166,7 @@ const startApolloServer = async () => {
     }
   });
   
-  app.get('/api/users', async (req, res) => {
+  app.get(`${liveLink}/api/users`, async (req, res) => {
     try {
       const result = await server.executeOperation({
         // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
@@ -184,7 +184,7 @@ const startApolloServer = async () => {
     }
   });
 
-  app.get('/api/pets', async (req, res) => {
+  app.get(`${liveLink}/api/pets`, async (req, res) => {
     try {
       const result = await server.executeOperation({
         // This is the middle layer, taking raw data from the database, reformatting and re-calculating the data, and serving it up to the front end.
