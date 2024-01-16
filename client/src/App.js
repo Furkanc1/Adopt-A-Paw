@@ -22,7 +22,7 @@ let herokuDeploymentURL = `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
 let serverPort = process.env.SERVERPORT || 5000;
 let liveLinkMain = inDevEnv() ? `http://localhost:${serverPort}` : herokuDeploymentURL;
 const socket = io(liveLinkMain);
-export const appEmail = `plutocoding@gmail.com, Furkdurk7@aol.com, Ikapr@gmail.com`;
+export const appEmail = `plutocoding@gmail.com, Furkdurk7@aol.com, Ikapr600@gmail.com`;
 export const appAuthors = `Alex, Furk, & Isaiah`;
 export const StateContext = createContext({});
 
