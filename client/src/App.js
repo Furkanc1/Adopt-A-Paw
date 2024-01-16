@@ -22,6 +22,7 @@ export const StateContext = createContext({});
 
 console.log(`Welcome to Adopt A Paw`);
 
+// Comment for Commit
 // This is to help us know what environment we are in. Are we in the local developer environment, or the deployed production environment?
 export const inDevEnv = () => window && window.location.host.includes(`local`);
 
