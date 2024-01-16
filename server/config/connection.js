@@ -2,7 +2,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-mongoose.connect(`mongodb+srv://plutocoding:GX6Cb6VkTaBJgoma@cluster0.vkcagdy.mongodb.net/adoptapet?retryWrites=true&w=majority`);
+mongoose.connect(process.env.MONGODB_URI || `mongodb://127.0.0.1:27017/adoptapet`);
 
 module.exports = mongoose.connection;
 
