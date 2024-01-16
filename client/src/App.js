@@ -31,7 +31,7 @@ export const placeholderPetImage = `https://www.worldanimalprotection.us/sites/d
 
 export const getUsersFromAPI = async () => {
   try {
-    let liveLink = inDevEnv() ? `http://localhost:3001` : ``;
+    let liveLink = inDevEnv() ? `http://localhost:3001` : `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
     let usersResponse = await fetch(`${liveLink}/api/users`);
     if (usersResponse.status === 200) {
       let usersData = await usersResponse.json();
@@ -44,7 +44,7 @@ export const getUsersFromAPI = async () => {
 
 export const getPetsFromAPI = async () => {
   try {
-    let liveLink = inDevEnv() ? `http://localhost:3001` : ``;
+    let liveLink = inDevEnv() ? `http://localhost:3001` : `https://adoptapaw-1-2c5b986974f2.herokuapp.com`;
     let petsResponse = await fetch(`${liveLink}/api/pets`);
     if (petsResponse.status === 200) {
       let petsData = await petsResponse.json();
