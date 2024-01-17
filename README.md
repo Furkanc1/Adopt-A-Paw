@@ -63,7 +63,7 @@ Use this [project presentation template](https://docs.google.com/presentation/d/
 
 ### Concept: 
 
-(ADD CONCEPT HERE)
+Creat a website that allows users to create accounts to either post information on animals in their posation for the intent of giving the animal away or view and inquire about animals on the site.
 
 ### Deployment:
 
